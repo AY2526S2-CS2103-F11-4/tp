@@ -7,6 +7,7 @@
       "headings": {
         "about-us": "About Us",
         "project-team": "Project team",
+        "nigel-gabriel-morais": "Nigel Gabriel Morais",
         "natalie-lee": "Natalie Lee",
         "randy-lim": "Randy Lim"
       },
@@ -137,6 +138,14 @@
       "title": "John Doe's Project Portfolio Page",
       "headings": {
         "project-addressbook-level-3": "Project: AddressBook Level 3"
+      },
+      "headingKeywords": {}
+    },
+    {
+      "src": "team/nigelgm.md",
+      "title": "Nigel Gabriel Morais' Project Portfolio Page",
+      "headings": {
+        "project-clinicconnect": "Project: ClinicConnect"
       },
       "headingKeywords": {}
     },
