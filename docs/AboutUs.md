@@ -11,51 +11,54 @@ You can reach us at the email `seer[at]comp.nus.edu.sg`
 
 ## Project team
 
-### John Doe
+### Anna Macinnes
 
-<img src="images/johndoe.png" width="200px">
+<img src="images/annamacinnes.png" width="200px">
+
+[[github](https://github.com/annamacinnes)]
+
+* Role: Team Member
+
+### Anish Kousik
+
+<img src="images/anishkousik.png" width="200px">
+
+[[github](https://github.com/anishkousik)]
+
+* Role: Developer
+
+### Niik Seah
+
+<img src="images/niikseah.png" width="200px">
+
+[[github](https://github.com/niikseah)]
+
+* Role: Team Member
+
+### Nigel Gabriel Morais
+
+<img src="images/nigelgm.png" width="200px">
 
 [[homepage](http://www.comp.nus.edu.sg/~damithch)]
-[[github](https://github.com/johndoe)]
-[[portfolio](team/johndoe.md)]
+[[github](https://github.com/NigelGM)]
 
-* Role: Project Advisor
+* Role: Team Member
 
-### Jane Doe
+### Natalie Lee
 
-<img src="images/johndoe.png" width="200px">
+<img src="images/lzynatalie.png" width="200px">
 
-[[github](http://github.com/johndoe)]
-[[portfolio](team/johndoe.md)]
+[[github](https://github.com/lzynatalie)]
 
-* Role: Team Lead
-* Responsibilities: UI
+* Role: Team Member
 
-### Johnny Doe
+### Randy Lim
 
-<img src="images/johndoe.png" width="200px">
+<img src="images/e1384467.png" width="200px">
 
-[[github](http://github.com/johndoe)] [[portfolio](team/johndoe.md)]
+[[github](https://github.com/e1384467)]
+[[portfolio](team/randylim.md)]
 
-* Role: Developer
-* Responsibilities: Data
+* Role: Team Member
 
-### Jean Doe
 
-<img src="images/johndoe.png" width="200px">
-
-[[github](http://github.com/johndoe)]
-[[portfolio](team/johndoe.md)]
-
-* Role: Developer
-* Responsibilities: Dev Ops + Threading
-
-### James Doe
-
-<img src="images/johndoe.png" width="200px">
-
-[[github](http://github.com/johndoe)]
-[[portfolio](team/johndoe.md)]
-
-* Role: Developer
-* Responsibilities: UI
