@@ -39,7 +39,7 @@ public class DeleteCommandParser implements Parser<DeleteCommand> {
 
     private DeleteCommand parseSingleIndex(String args) throws ParseException {
         try {
-            Index[] index = { ParserUtil.parseIndex(args) };
+            Index index = ParserUtil.parseIndex(args);
             return new DeleteCommand(index);
         } catch (ParseException pe) {
             throw new ParseException(
@@ -85,15 +85,10 @@ public class DeleteCommandParser implements Parser<DeleteCommand> {
                     String.format(MESSAGE_INVALID_COMMAND_FORMAT, DeleteCommand.MESSAGE_USAGE_RANGE_INDICES), pe);
         }
 
-        if (startIndex.getZeroBased() >= endIndex.getZeroBased()) {
+        if (startIndex.getZeroBased() > endIndex.getZeroBased()) {
             throw new ParseException(Messages.MESSAGE_INVALID_PERSON_INDEX_RANGE);
         }
 
-        int numIndices = endIndex.getZeroBased() - startIndex.getZeroBased() + 1;
-        Index[] indices = new Index[numIndices];
-        for (int i = 0; i < numIndices; i++) {
-            indices[i] = Index.fromZeroBased(startIndex.getZeroBased() + i);
-        }
-        return new DeleteCommand(indices);
+        return new DeleteCommand(startIndex, endIndex);
     }
 }

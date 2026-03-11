@@ -38,8 +38,30 @@ public class DeleteCommand extends Command {
 
     private final Index[] targetIndices;
 
+    public DeleteCommand(Index targetIndex) {
+        this.targetIndices = new Index[] { targetIndex };
+    }
+
     public DeleteCommand(Index[] targetIndices) {
         this.targetIndices = targetIndices;
+    }
+
+    /**
+     * Constructor for DeleteCommand that takes in a start index and end index,
+     * and deletes all people in the range of the two indices (inclusive).
+     * @param startIndex
+     * @param endIndex
+     */
+    public DeleteCommand(Index startIndex, Index endIndex) {
+        int start = startIndex.getZeroBased();
+        int end = endIndex.getZeroBased();
+        assert startIndex.getZeroBased() <= endIndex.getZeroBased()
+                : "Start index should be less than or equal to end index";;
+
+        this.targetIndices = new Index[end - start + 1];
+        for (int i = 0; i < targetIndices.length; i++) {
+            targetIndices[i] = Index.fromZeroBased(start + i);
+        }
     }
 
     @Override
@@ -51,8 +73,7 @@ public class DeleteCommand extends Command {
         for (int i = 0; i < targetIndices.length; i++) {
             Index targetIndex = targetIndices[i];
             if (targetIndex.getZeroBased() >= lastShownList.size()) {
-                throw new CommandException(
-                        String.format(Messages.MESSAGE_INVALID_PERSON_DISPLAYED_INDEX));
+                throw new CommandException(Messages.MESSAGE_INVALID_PERSON_DISPLAYED_INDEX);
             }
 
             Person personToDelete = lastShownList.get(targetIndex.getZeroBased());
@@ -85,7 +106,7 @@ public class DeleteCommand extends Command {
     @Override
     public String toString() {
         return new ToStringBuilder(this)
-                .add("targetIndices", targetIndices)
+                .add("targetIndices", Arrays.toString(targetIndices))
                 .toString();
     }
 }
