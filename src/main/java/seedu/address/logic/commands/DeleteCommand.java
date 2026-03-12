@@ -73,7 +73,7 @@ public class DeleteCommand extends Command {
         for (int i = 0; i < targetIndices.length; i++) {
             Index targetIndex = targetIndices[i];
             if (targetIndex.getZeroBased() >= lastShownList.size()) {
-                throw new CommandException(Messages.MESSAGE_INVALID_PERSON_DISPLAYED_INDEX);
+                throw new CommandException(Messages.MESSAGE_INVALID_PERSON_INDICES);
             }
 
             Person personToDelete = lastShownList.get(targetIndex.getZeroBased());
