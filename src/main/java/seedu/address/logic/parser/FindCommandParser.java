@@ -44,7 +44,7 @@ public class FindCommandParser implements Parser<FindCommand> {
 
         // At least one search parameter must be provided (either legacy name or a prefixed field).
         if (!hasName && !hasIc && !hasPhone && argMultimap.getPreamble().isEmpty()) {
-            throw new ParseException("At least one parameter to search must be provided.");
+            throw new ParseException("At least one identifier to search with must be provided.");
         }
 
         // Disallow duplicate prefixes for single-valued fields with a custom message.
