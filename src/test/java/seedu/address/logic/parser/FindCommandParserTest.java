@@ -18,14 +18,16 @@ public class FindCommandParserTest {
 
     @Test
     public void parse_emptyArg_throwsParseException() {
-        assertParseFailure(parser, "     ", String.format(MESSAGE_INVALID_COMMAND_FORMAT, FindCommand.MESSAGE_USAGE));
+        assertParseFailure(parser, "     ",
+                String.format(MESSAGE_INVALID_COMMAND_FORMAT, FindCommand.MESSAGE_USAGE));
     }
 
     @Test
     public void parse_validArgs_returnsFindCommand() {
         // no leading and trailing whitespaces
         FindCommand expectedFindCommand =
-                new FindCommand(new NameContainsKeywordsPredicate(Arrays.asList("Alice", "Bob")));
+                new FindCommand(new NameContainsKeywordsPredicate(Arrays.asList("Alice", "Bob")),
+                        "Patient Name: Alice Bob");
         assertParseSuccess(parser, "Alice Bob", expectedFindCommand);
 
         // multiple whitespaces between keywords
@@ -33,7 +35,7 @@ public class FindCommandParserTest {
     }
 
     @Test
-    public void parse_validPrefixedArgs_returnsFindCommand() {
+    public void parse_validPrefixedArgs_doesNotThrow() {
         // simple prefixed form
         assertDoesNotThrow(() -> parser.parse(" n/Alice Bob"));
 
@@ -67,6 +69,22 @@ public class FindCommandParserTest {
     public void parse_emptyPhonePrefix_throwsParseException() {
         assertParseFailure(parser, " p/   ",
                 String.format(MESSAGE_INVALID_COMMAND_FORMAT, FindCommand.MESSAGE_USAGE));
+    }
+
+    @Test
+    public void parse_noFieldsProvided_throwsParseException() {
+        assertParseFailure(parser, "",
+                "At least one parameter to search must be provided.");
+    }
+
+    @Test
+    public void parse_duplicatePrefixes_throwsParseException() {
+        assertParseFailure(parser, " n/Alice n/Bob",
+                "Duplicate parameter detected. Each prefix (e.g., p/, ic/) should only be used once.");
+        assertParseFailure(parser, " ic/S1234567A ic/S7654321B",
+                "Duplicate parameter detected. Each prefix (e.g., p/, ic/) should only be used once.");
+        assertParseFailure(parser, " p/91234567 p/98765432",
+                "Duplicate parameter detected. Each prefix (e.g., p/, ic/) should only be used once.");
     }
 
 }

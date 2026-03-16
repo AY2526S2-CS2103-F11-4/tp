@@ -18,9 +18,9 @@ public class FindCommand extends Command {
     public static final String COMMAND_WORD = "find";
 
     public static final String MESSAGE_USAGE = COMMAND_WORD + ": Finds all patients whose details match any of "
-            + "the specified search parameters and displays them as a list with index numbers.\n"
+            + "the specified search parameters (case-insensitive) and displays them as a list.\n"
             + "Parameters:\n"
-            + "  n/NAME_KEYWORDS...\n"
+            + "  n/NAME...\n"
             + "  ic/IC_NUMBER\n"
             + "  p/PHONE_NUMBER\n"
             + "You can specify one or more of the above. At least one must be provided.\n"
@@ -30,17 +30,21 @@ public class FindCommand extends Command {
             + "  " + COMMAND_WORD + " p/91234567";
 
     private final Predicate<Person> predicate;
+    private final String criteriaDescription;
 
-    public FindCommand(Predicate<Person> predicate) {
+    public FindCommand(Predicate<Person> predicate, String criteriaDescription) {
         this.predicate = predicate;
+        this.criteriaDescription = criteriaDescription;
     }
 
     @Override
     public CommandResult execute(Model model) {
         requireNonNull(model);
         model.updateFilteredPersonList(predicate);
-        return new CommandResult(
-                String.format(Messages.MESSAGE_PERSONS_LISTED_OVERVIEW, model.getFilteredPersonList().size()));
+        int count = model.getFilteredPersonList().size();
+        String header = String.format("Found %d patient(s) matching the criteria of: ", count);
+        String details = criteriaDescription == null ? "" : criteriaDescription;
+        return new CommandResult(header + details);
     }
 
     @Override

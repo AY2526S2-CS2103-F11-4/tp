@@ -42,13 +42,28 @@ public class FindCommandParser implements Parser<FindCommand> {
         boolean hasIc = argMultimap.getValue(PREFIX_IC).isPresent();
         boolean hasPhone = argMultimap.getValue(PREFIX_PHONE).isPresent();
 
+        // At least one search parameter must be provided (either legacy name or a prefixed field).
+        if (!hasName && !hasIc && !hasPhone && argMultimap.getPreamble().isEmpty()) {
+            throw new ParseException("At least one parameter to search must be provided.");
+        }
+
+        // Disallow duplicate prefixes for single-valued fields with a custom message.
+        if (argMultimap.getAllValues(PREFIX_NAME).size() > 1
+                || argMultimap.getAllValues(PREFIX_IC).size() > 1
+                || argMultimap.getAllValues(PREFIX_PHONE).size() > 1) {
+            throw new ParseException(
+                    "Duplicate parameter detected. Each prefix (e.g., p/, ic/) should only be used once.");
+        }
+
         // Legacy behaviour: no prefixes, treat entire args as name keywords
-        if (!hasName && !hasIc && !hasPhone) {
+        if (!hasName && !hasIc && !hasPhone && !trimmedArgs.isEmpty()) {
             List<String> legacyKeywords = Arrays.asList(trimmedArgs.split("\\s+"));
-            return new FindCommand(new NameContainsKeywordsPredicate(legacyKeywords));
+            String criteriaDescription = "Patient Name: " + trimmedArgs;
+            return new FindCommand(new NameContainsKeywordsPredicate(legacyKeywords), criteriaDescription);
         }
 
         Predicate<Person> predicate = person -> false;
+        StringBuilder criteriaBuilder = new StringBuilder();
 
         if (hasName) {
             String nameArgs = argMultimap.getValue(PREFIX_NAME).get().trim();
@@ -58,6 +73,7 @@ public class FindCommandParser implements Parser<FindCommand> {
             }
             List<String> nameKeywords = Arrays.asList(nameArgs.split("\\s+"));
             predicate = predicate.or(new NameContainsKeywordsPredicate(nameKeywords));
+            criteriaBuilder.append("Patient Name: ").append(nameArgs);
         }
 
         if (hasIc) {
@@ -68,6 +84,10 @@ public class FindCommandParser implements Parser<FindCommand> {
             }
             String icToMatch = icArg;
             predicate = predicate.or(person -> person.getIc().value.equalsIgnoreCase(icToMatch));
+            if (criteriaBuilder.length() > 0) {
+                criteriaBuilder.append(", ");
+            }
+            criteriaBuilder.append("IC Number: ").append(icArg);
         }
 
         if (hasPhone) {
@@ -78,9 +98,14 @@ public class FindCommandParser implements Parser<FindCommand> {
             }
             String phoneToMatch = phoneArg;
             predicate = predicate.or(person -> person.getPhone().value.equals(phoneToMatch));
+            if (criteriaBuilder.length() > 0) {
+                criteriaBuilder.append(", ");
+            }
+            criteriaBuilder.append("Phone Number: ").append(phoneArg);
         }
 
-        return new FindCommand(predicate);
+        String criteriaDescription = criteriaBuilder.toString().trim();
+        return new FindCommand(predicate, criteriaDescription);
     }
 
 }
