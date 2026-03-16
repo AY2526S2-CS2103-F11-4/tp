@@ -30,6 +30,11 @@ public class FindCommandParser implements Parser<FindCommand> {
      */
     public FindCommand parse(String args) throws ParseException {
         String trimmedArgs = args.trim();
+        // No text at all (e.g. "find" with nothing after) -> custom message.
+        if (args.isEmpty()) {
+            throw new ParseException("At least one parameter to search must be provided.");
+        }
+        // Only whitespace after command word -> treat as invalid format (keeps existing behaviour).
         if (trimmedArgs.isEmpty()) {
             throw new ParseException(
                     String.format(MESSAGE_INVALID_COMMAND_FORMAT, FindCommand.MESSAGE_USAGE));

@@ -66,6 +66,7 @@ public class FindCommand extends Command {
     public String toString() {
         return new ToStringBuilder(this)
                 .add("predicate", predicate)
+                .add("criteriaDescription", criteriaDescription)
                 .toString();
     }
 }
