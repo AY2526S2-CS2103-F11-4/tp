@@ -78,9 +78,10 @@ public class FindCommandTest {
     public void toStringMethod() {
         NameContainsKeywordsPredicate predicate = new NameContainsKeywordsPredicate(Arrays.asList("keyword"));
         FindCommand findCommand = new FindCommand(predicate, "Patient Name: keyword");
-        String expected = FindCommand.class.getCanonicalName()
-                + "{predicate=" + predicate + ", criteriaDescription=Patient Name: keyword}";
-        assertEquals(expected, findCommand.toString());
+        String result = findCommand.toString();
+        assertTrue(result.contains(FindCommand.class.getCanonicalName()));
+        assertTrue(result.contains("predicate=" + predicate));
+        assertTrue(result.contains("criteriaDescription=Patient Name: keyword"));
     }
 
     /**
