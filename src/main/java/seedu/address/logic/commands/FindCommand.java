@@ -32,7 +32,7 @@ public class FindCommand extends Command {
     private final String criteriaDescription;
 
     /**
-     * Creates a {@code FindCommand} with the given {@code predicate} and a human-readable
+     * Creates a {@code FindCommand} with the given {@code predicate} and a
      * description of the search criteria.
      *
      * @param predicate predicate used to filter patients

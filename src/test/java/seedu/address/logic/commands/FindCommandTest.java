@@ -74,6 +74,16 @@ public class FindCommandTest {
     }
 
     @Test
+    public void execute_nullCriteriaDescription_usesHeaderOnly() {
+        // Reuse existing predicate that matches 3 persons
+        NameContainsKeywordsPredicate predicate = preparePredicate("Kurz Elle Kunz");
+        FindCommand command = new FindCommand(predicate, null);
+        expectedModel.updateFilteredPersonList(predicate);
+        assertCommandSuccess(command, model,
+                "Found 3 patient(s) matching the criteria of: ", expectedModel);
+    }
+
+    @Test
     public void toStringMethod() {
         NameContainsKeywordsPredicate predicate = new NameContainsKeywordsPredicate(Arrays.asList("keyword"));
         FindCommand findCommand = new FindCommand(predicate, "Patient Name: keyword");

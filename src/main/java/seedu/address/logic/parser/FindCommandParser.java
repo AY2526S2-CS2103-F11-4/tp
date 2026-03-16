@@ -30,7 +30,7 @@ public class FindCommandParser implements Parser<FindCommand> {
      */
     public FindCommand parse(String args) throws ParseException {
         String trimmedArgs = args.trim();
-        // No text at all (e.g. "find" with nothing after) -> custom message.
+        // No text at all
         if (args.isEmpty()) {
             throw new ParseException("At least one parameter to search with must be provided.");
         }
@@ -52,7 +52,7 @@ public class FindCommandParser implements Parser<FindCommand> {
             throw new ParseException("At least one parameter to search with must be provided.");
         }
 
-        // Disallow duplicate prefixes for single-valued fields with a custom message.
+        // Disallow duplicate prefixes.
         if (argMultimap.getAllValues(PREFIX_NAME).size() > 1
                 || argMultimap.getAllValues(PREFIX_IC).size() > 1
                 || argMultimap.getAllValues(PREFIX_PHONE).size() > 1) {

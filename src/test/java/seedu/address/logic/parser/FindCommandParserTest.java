@@ -87,4 +87,10 @@ public class FindCommandParserTest {
                 "Duplicate parameter detected. Each prefix (e.g., p/, ic/) should only be used once.");
     }
 
+    @Test
+    public void parse_multiplePrefixes_doesNotThrow() {
+        // name + ic + phone together to test comma joining output.
+        assertDoesNotThrow(() -> parser.parse(" n/Alice ic/S1234567A p/91234567"));
+    }
+
 }
