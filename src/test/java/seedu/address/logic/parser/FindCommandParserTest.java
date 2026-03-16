@@ -1,5 +1,6 @@
 package seedu.address.logic.parser;
 
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static seedu.address.logic.Messages.MESSAGE_INVALID_COMMAND_FORMAT;
 import static seedu.address.logic.parser.CommandParserTestUtil.assertParseFailure;
 import static seedu.address.logic.parser.CommandParserTestUtil.assertParseSuccess;
@@ -46,6 +47,28 @@ public class FindCommandParserTest {
     @Test
     public void parse_emptyPrefixedArgs_throwsParseException() {
         assertParseFailure(parser, " n/   ",
+                String.format(MESSAGE_INVALID_COMMAND_FORMAT, FindCommand.MESSAGE_USAGE));
+    }
+
+    @Test
+    public void parse_validIcPrefix_doesNotThrow() {
+        assertDoesNotThrow(() -> parser.parse(" ic/S1234567A"));
+    }
+
+    @Test
+    public void parse_validPhonePrefix_doesNotThrow() {
+        assertDoesNotThrow(() -> parser.parse(" p/91234567"));
+    }
+
+    @Test
+    public void parse_emptyIcPrefix_throwsParseException() {
+        assertParseFailure(parser, " ic/   ",
+                String.format(MESSAGE_INVALID_COMMAND_FORMAT, FindCommand.MESSAGE_USAGE));
+    }
+
+    @Test
+    public void parse_emptyPhonePrefix_throwsParseException() {
+        assertParseFailure(parser, " p/   ",
                 String.format(MESSAGE_INVALID_COMMAND_FORMAT, FindCommand.MESSAGE_USAGE));
     }
 
