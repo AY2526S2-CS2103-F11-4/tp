@@ -27,7 +27,7 @@ public class ResultDisplay extends UiPart<Region> {
     public void setFeedbackToUser(String feedbackToUser) {
         requireNonNull(feedbackToUser);
         resultDisplay.setText(feedbackToUser);
-        placeHolder.getStyleClass().remove("exit-message");
+        resetStyle();
     }
 
     /**
@@ -35,11 +35,33 @@ public class ResultDisplay extends UiPart<Region> {
      * This is specific to the ExitCommand.
      */
     public void setExitMessage(String message) {
+        resetStyle();
         requireNonNull(message);
         resultDisplay.setText(message);
 
         if (!placeHolder.getStyleClass().contains("exit-message")) {
             placeHolder.getStyleClass().add("exit-message");
         }
+    }
+
+    /**
+     * Displays the erroneous exit message in a red box.
+     * This is specific to the ExitCommand.
+     */
+    public void setExitErrorMessage(String message) {
+        resetStyle();
+        requireNonNull(message);
+        resultDisplay.setText(message);
+
+        if (!placeHolder.getStyleClass().contains("exit-error-message")) {
+            placeHolder.getStyleClass().add("exit-error-message");
+        }
+    }
+
+    /**
+     * Removes any exit message displays.
+     */
+    public void resetStyle() {
+        placeHolder.getStyleClass().removeAll("exit-message", "exit-error-message");
     }
 }

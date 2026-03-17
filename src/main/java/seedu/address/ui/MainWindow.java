@@ -191,8 +191,12 @@ public class MainWindow extends UiPart<Stage> {
 
             return commandResult;
         } catch (CommandException | ParseException e) {
-            logger.info("An error occurred while executing command: " + commandText);
-            resultDisplay.setFeedbackToUser(e.getMessage());
+            if (commandText.trim().startsWith("exit")) {
+                resultDisplay.setExitErrorMessage(e.getMessage());
+            } else {
+                logger.info("An error occurred while executing command: " + commandText);
+                resultDisplay.setFeedbackToUser(e.getMessage());
+            }
             throw e;
         }
     }
