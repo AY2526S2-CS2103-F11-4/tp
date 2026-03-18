@@ -155,6 +155,43 @@ ClinicConnect automatically sorts the patient list to prioritize critical cases:
 
 --------------------------------------------------------------------------------------------------------------------
 
+## Data Management
+
+### Saving the data
+
+ClinicConnect data is saved in the hard disk automatically after any command that changes the data. There is no need to save manually.
+
+### Editing the data file
+
+ClinicConnect data is saved automatically as a JSON file `[JAR file location]/data/clinicconnect.json`. Advanced users are welcome to update data directly by editing that data file.
+
+<box type="warning" seamless>
+
+**Caution:**
+If your changes to the data file make its format invalid, ClinicConnect will discard all data and start with an empty data file at the next run. Hence, it is recommended to take a backup of the file before editing it.<br>
+Furthermore, certain edits can cause ClinicConnect to behave in unexpected ways (e.g., if a value entered is outside the acceptable range). Therefore, edit the data file only if you are confident that you can update it correctly.
+</box>
+
+### Archiving data files `[coming in v2.0]`
+
+_Details coming soon ..._
+
+--------------------------------------------------------------------------------------------------------------------
+
+## FAQ
+
+**Q**: How do I transfer my data to another Computer?<br>
+**A**: Install the app in the other computer and overwrite the empty data file it creates with the file that contains the data of your previous ClinicConnect home folder.
+
+--------------------------------------------------------------------------------------------------------------------
+
+## Known issues
+
+1. **When using multiple screens**, if you move the application to a secondary screen, and later switch to using only the primary screen, the GUI will open off-screen. The remedy is to delete the `preferences.json` file created by the application before running the application again.
+2. **If you minimize the Help Window** and then run the `help` command (or use the `Help` menu, or the keyboard shortcut `F1`) again, the original Help Window will remain minimized, and no new Help Window will appear. The remedy is to manually restore the minimized Help Window.
+
+--------------------------------------------------------------------------------------------------------------------
+
 ## Command Summary
 
 | Action | Format | Examples |
