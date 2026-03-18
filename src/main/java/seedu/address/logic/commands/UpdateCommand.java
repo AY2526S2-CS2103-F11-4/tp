@@ -5,6 +5,7 @@ import static seedu.address.logic.parser.CliSyntax.PREFIX_ADDRESS;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_EMAIL;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_IC;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_NAME;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_NEXT_OF_KIN_PHONE;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_PATIENT_PHONE;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_TAG;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_URGENCY;
@@ -27,6 +28,7 @@ import seedu.address.model.person.Address;
 import seedu.address.model.person.Email;
 import seedu.address.model.person.Ic;
 import seedu.address.model.person.Name;
+import seedu.address.model.person.NextOfKinPhone;
 import seedu.address.model.person.Person;
 import seedu.address.model.person.Phone;
 import seedu.address.model.person.UrgencyLevel;
@@ -49,6 +51,7 @@ public class UpdateCommand extends Command {
             + "[" + PREFIX_ADDRESS + "ADDRESS] "
             + "[" + PREFIX_IC + "IC] "
             + "[" + PREFIX_URGENCY + "LEVEL] "
+            + "[" + PREFIX_NEXT_OF_KIN_PHONE + "N-O-K PHONE] "
             + "[" + PREFIX_TAG + "TAG]...\n"
             + "Example: " + COMMAND_WORD + " 1 "
             + PREFIX_PATIENT_PHONE + "91234567 "
@@ -109,6 +112,8 @@ public class UpdateCommand extends Command {
         Ic updatedIc = updatePersonDescriptor.getIc().orElse(personToUpdate.getIc());
         UrgencyLevel updatedUrgencyLevel = updatePersonDescriptor.getUrgencyLevel()
                 .orElse(personToUpdate.getUrgencyLevel());
+        NextOfKinPhone updatedNextOfKinPhone = updatePersonDescriptor.getNextOfKinPhone()
+                .orElse(personToUpdate.getNextOfKinPhone());
 
         return new Person(updatedName,
                 updatedPhone,
@@ -116,7 +121,8 @@ public class UpdateCommand extends Command {
                 updatedAddress,
                 updatedTags,
                 updatedIc,
-                updatedUrgencyLevel);
+                updatedUrgencyLevel,
+                updatedNextOfKinPhone);
     }
 
     @Override
@@ -154,6 +160,7 @@ public class UpdateCommand extends Command {
         private Set<Tag> tags;
         private Ic ic;
         private UrgencyLevel urgencyLevel;
+        private NextOfKinPhone nextOfKinPhone;
 
         public UpdatePersonDescriptor() {}
 
@@ -169,6 +176,7 @@ public class UpdateCommand extends Command {
             setTags(toCopy.tags);
             setUrgencyLevel(toCopy.urgencyLevel);
             setIc(toCopy.ic);
+            setNextOfKinPhone(toCopy.nextOfKinPhone);
         }
 
         /**
@@ -243,6 +251,14 @@ public class UpdateCommand extends Command {
             return Optional.ofNullable(urgencyLevel);
         }
 
+        public void setNextOfKinPhone(NextOfKinPhone nextOfKinPhone) {
+            this.nextOfKinPhone = nextOfKinPhone;
+        }
+
+        public Optional<NextOfKinPhone> getNextOfKinPhone() {
+            return Optional.ofNullable(nextOfKinPhone);
+        }
+
         @Override
         public boolean equals(Object other) {
             if (other == this) {
@@ -260,7 +276,8 @@ public class UpdateCommand extends Command {
                     && Objects.equals(address, otherUpdatePersonDescriptor.address)
                     && Objects.equals(tags, otherUpdatePersonDescriptor.tags)
                     && Objects.equals(ic, otherUpdatePersonDescriptor.ic)
-                    && Objects.equals(urgencyLevel, otherUpdatePersonDescriptor.urgencyLevel);
+                    && Objects.equals(urgencyLevel, otherUpdatePersonDescriptor.urgencyLevel)
+                    && Objects.equals(nextOfKinPhone, otherUpdatePersonDescriptor.nextOfKinPhone);
         }
 
         @Override
@@ -273,6 +290,7 @@ public class UpdateCommand extends Command {
                     .add("tags", tags)
                     .add("ic", ic)
                     .add("urgencyLevel", urgencyLevel)
+                    .add("nextOfKinPhone", nextOfKinPhone)
                     .toString();
         }
     }

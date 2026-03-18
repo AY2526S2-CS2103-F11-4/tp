@@ -26,6 +26,7 @@ public class Person {
     private final Address address;
     private final Set<Tag> tags = new HashSet<>();
     private final UrgencyLevel urgencyLevel;
+    private final NextOfKinPhone nextOfKinPhone;
 
     /**
      * Every field must be present and not null.
@@ -36,8 +37,9 @@ public class Person {
                   Address address,
                   Set<Tag> tags,
                   Ic ic,
-                  UrgencyLevel urgencyLevel) {
-        requireAllNonNull(name, phone, email, address, tags, ic, urgencyLevel);
+                  UrgencyLevel urgencyLevel,
+                  NextOfKinPhone nextOfKinPhone) {
+        requireAllNonNull(name, phone, email, address, tags, ic, urgencyLevel, nextOfKinPhone);
         this.name = name;
         this.phone = phone;
         this.email = email;
@@ -45,6 +47,7 @@ public class Person {
         this.tags.addAll(tags);
         this.ic = ic;
         this.urgencyLevel = urgencyLevel;
+        this.nextOfKinPhone = nextOfKinPhone;
     }
 
     public Name getName() {
@@ -61,6 +64,10 @@ public class Person {
 
     public Address getAddress() {
         return address;
+    }
+
+    public NextOfKinPhone getNextOfKinPhone() {
+        return nextOfKinPhone;
     }
 
     /**
@@ -114,13 +121,14 @@ public class Person {
                 && address.equals(otherPerson.address)
                 && tags.equals(otherPerson.tags)
                 && ic.equals(otherPerson.ic)
-                && urgencyLevel.equals(otherPerson.urgencyLevel);
+                && urgencyLevel.equals(otherPerson.urgencyLevel)
+                && nextOfKinPhone.equals(otherPerson.nextOfKinPhone);
     }
 
     @Override
     public int hashCode() {
         // use this method for custom fields hashing instead of implementing your own
-        return Objects.hash(name, phone, email, address, tags, ic, urgencyLevel);
+        return Objects.hash(name, phone, email, address, tags, ic, urgencyLevel, nextOfKinPhone);
     }
 
     @Override
@@ -133,6 +141,7 @@ public class Person {
                 .add("tags", tags)
                 .add("ic", ic)
                 .add("urgencyLevel", urgencyLevel)
+                .add("nextOfKinPhone", nextOfKinPhone)
                 .toString();
     }
 

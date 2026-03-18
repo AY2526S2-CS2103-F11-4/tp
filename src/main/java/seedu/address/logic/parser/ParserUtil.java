@@ -13,6 +13,7 @@ import seedu.address.model.person.Address;
 import seedu.address.model.person.Email;
 import seedu.address.model.person.Ic;
 import seedu.address.model.person.Name;
+import seedu.address.model.person.NextOfKinPhone;
 import seedu.address.model.person.Phone;
 import seedu.address.model.person.UrgencyLevel;
 import seedu.address.model.tag.Tag;
@@ -137,6 +138,21 @@ public class ParserUtil {
             throw new ParseException(UrgencyLevel.MESSAGE_CONSTRAINTS);
         }
         return new UrgencyLevel(trimmedUrgencyLevel);
+    }
+
+    /**
+     * Parses a {@code String phone} into a {@code NextOfKinPhone}.
+     * Leading and trailing whitespaces will be trimmed.
+     *
+     * @throws ParseException if the given {@code phone} is invalid.
+     */
+    public static NextOfKinPhone parseNextOfKinPhone(String phone) throws ParseException {
+        requireNonNull(phone);
+        String trimmedPhone = phone.trim();
+        if (!NextOfKinPhone.isValidNextOfKinPhone(trimmedPhone)) {
+            throw new ParseException(NextOfKinPhone.MESSAGE_CONSTRAINTS);
+        }
+        return new NextOfKinPhone(trimmedPhone);
     }
 
     /**

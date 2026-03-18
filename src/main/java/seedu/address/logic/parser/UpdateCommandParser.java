@@ -6,6 +6,7 @@ import static seedu.address.logic.parser.CliSyntax.PREFIX_ADDRESS;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_EMAIL;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_IC;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_NAME;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_NEXT_OF_KIN_PHONE;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_PATIENT_PHONE;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_TAG;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_URGENCY;
@@ -41,7 +42,8 @@ public class UpdateCommandParser implements Parser<UpdateCommand> {
                         PREFIX_ADDRESS,
                         PREFIX_TAG,
                         PREFIX_IC,
-                        PREFIX_URGENCY
+                        PREFIX_URGENCY,
+                        PREFIX_NEXT_OF_KIN_PHONE
                 );
 
         Index index;
@@ -57,7 +59,9 @@ public class UpdateCommandParser implements Parser<UpdateCommand> {
                 PREFIX_EMAIL,
                 PREFIX_ADDRESS,
                 PREFIX_IC,
-                PREFIX_URGENCY);
+                PREFIX_URGENCY,
+                PREFIX_NEXT_OF_KIN_PHONE
+        );
 
         UpdatePersonDescriptor updatePersonDescriptor = new UpdatePersonDescriptor();
 
@@ -79,6 +83,10 @@ public class UpdateCommandParser implements Parser<UpdateCommand> {
         }
         if (argMultimap.getValue(PREFIX_IC).isPresent()) {
             updatePersonDescriptor.setIc(ParserUtil.parseIc(argMultimap.getValue(PREFIX_IC).get()));
+        }
+        if (argMultimap.getValue(PREFIX_NEXT_OF_KIN_PHONE).isPresent()) {
+            updatePersonDescriptor.setNextOfKinPhone(ParserUtil
+                    .parseNextOfKinPhone(argMultimap.getValue(PREFIX_NEXT_OF_KIN_PHONE).get()));
         }
         parseTagsForEdit(argMultimap.getAllValues(PREFIX_TAG)).ifPresent(updatePersonDescriptor::setTags);
 

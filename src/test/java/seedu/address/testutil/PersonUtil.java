@@ -4,6 +4,7 @@ import static seedu.address.logic.parser.CliSyntax.PREFIX_ADDRESS;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_EMAIL;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_IC;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_NAME;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_NEXT_OF_KIN_PHONE;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_PATIENT_PHONE;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_TAG;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_URGENCY;
@@ -41,6 +42,7 @@ public class PersonUtil {
         );
         sb.append(PREFIX_IC + person.getIc().value + " ");
         sb.append(PREFIX_URGENCY + person.getUrgencyLevel().toString() + " ");
+        sb.append(PREFIX_NEXT_OF_KIN_PHONE + person.getNextOfKinPhone().toString() + " ");
         return sb.toString();
     }
 
@@ -50,9 +52,11 @@ public class PersonUtil {
     public static String getUpdatePersonDescriptorDetails(UpdatePersonDescriptor descriptor) {
         StringBuilder sb = new StringBuilder();
         descriptor.getName().ifPresent(name -> sb.append(PREFIX_NAME).append(name.fullName).append(" "));
-        descriptor.getPhone().ifPresent(phone -> sb.append(PREFIX_PATIENT_PHONE).append(phone.value).append(" "));
+        descriptor.getPhone().ifPresent(phone -> sb.append(PREFIX_PATIENT_PHONE).append(phone.value)
+                .append(" "));
         descriptor.getEmail().ifPresent(email -> sb.append(PREFIX_EMAIL).append(email.value).append(" "));
-        descriptor.getAddress().ifPresent(address -> sb.append(PREFIX_ADDRESS).append(address.value).append(" "));
+        descriptor.getAddress().ifPresent(address -> sb.append(PREFIX_ADDRESS).append(address.value)
+                .append(" "));
         if (descriptor.getTags().isPresent()) {
             Set<Tag> tags = descriptor.getTags().get();
             if (tags.isEmpty()) {
@@ -64,6 +68,8 @@ public class PersonUtil {
         descriptor.getIc().ifPresent(ic -> sb.append(PREFIX_IC).append(ic.value).append(" "));
         descriptor.getUrgencyLevel().ifPresent(urgencyLevel -> sb.append(PREFIX_URGENCY).append(urgencyLevel)
                 .append(" "));
+        descriptor.getNextOfKinPhone().ifPresent(nextOfKinPhone -> sb.append(PREFIX_NEXT_OF_KIN_PHONE)
+                .append(nextOfKinPhone.value).append(" "));
         return sb.toString();
     }
 }
