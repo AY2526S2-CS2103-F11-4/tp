@@ -44,7 +44,7 @@ class JsonAdaptedPerson {
     @JsonCreator
     public JsonAdaptedPerson(@JsonProperty("name") String name, @JsonProperty("phone") String phone,
             @JsonProperty("email") String email, @JsonProperty("address") String address,
-            @JsonProperty("tags") List<JsonAdaptedTag> tags, @JsonProperty("ic") String ic,
+            @JsonProperty("tags") List<JsonAdaptedSymptom> tags, @JsonProperty("ic") String ic,
             @JsonProperty("urgencyLevel") String urgencyLevel,
                              @JsonProperty("doctorName") String doctorName,
                              @JsonProperty("nextOfKinPhone") String nextOfKinPhone) {
@@ -157,7 +157,7 @@ class JsonAdaptedPerson {
 
         final Set<Symptom> modelSymptoms = new HashSet<>(personSymptoms);
         return new Person(modelName, modelPhone, modelEmail, modelAddress, modelSymptoms, modelIc, modelUrgencyLevel,
-                modelDoctorName);
+                modelNextOfKinPhone, modelDoctorName);
     }
 
 }

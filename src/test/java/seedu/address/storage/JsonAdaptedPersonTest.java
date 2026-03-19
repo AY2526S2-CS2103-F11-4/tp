@@ -43,7 +43,7 @@ public class JsonAdaptedPersonTest {
     private static final String VALID_URGENCY_LEVEL = BENSON.getUrgencyLevel().toString();
     private static final String VALID_NEXT_OF_KIN_PHONE = BENSON.getNextOfKinPhone().toString();
     private static final String VALID_DOCTOR_NAME = BENSON.getDoctorName().toString();
-  
+
     @Test
     public void toModelType_validPersonDetails_returnsPerson() throws Exception {
         JsonAdaptedPerson person = new JsonAdaptedPerson(BENSON);
@@ -77,8 +77,8 @@ public class JsonAdaptedPersonTest {
                 VALID_SYMPTOMS,
                 VALID_IC,
                 VALID_URGENCY_LEVEL,
-                VALID_DOCTOR_NAME,
                 VALID_NEXT_OF_KIN_PHONE,
+                VALID_DOCTOR_NAME
         );
         String expectedMessage = String.format(MISSING_FIELD_MESSAGE_FORMAT, Name.class.getSimpleName());
         assertThrows(IllegalValueException.class, expectedMessage, person::toModelType);
@@ -95,8 +95,8 @@ public class JsonAdaptedPersonTest {
                         VALID_SYMPTOMS,
                         VALID_IC,
                         VALID_URGENCY_LEVEL,
-                        VALID_DOCTOR_NAME,
-                        VALID_NEXT_OF_KIN_PHONE
+                        VALID_NEXT_OF_KIN_PHONE,
+                        VALID_DOCTOR_NAME
                 );
         String expectedMessage = Phone.MESSAGE_CONSTRAINTS;
         assertThrows(IllegalValueException.class, expectedMessage, person::toModelType);
@@ -130,8 +130,8 @@ public class JsonAdaptedPersonTest {
                         VALID_SYMPTOMS,
                         VALID_IC,
                         VALID_URGENCY_LEVEL,
-                        VALID_DOCTOR_NAME,
-                        VALID_NEXT_OF_KIN_PHONE
+                        VALID_NEXT_OF_KIN_PHONE,
+                        VALID_DOCTOR_NAME
                 );
         String expectedMessage = Email.MESSAGE_CONSTRAINTS;
         assertThrows(IllegalValueException.class, expectedMessage, person::toModelType);
@@ -147,8 +147,8 @@ public class JsonAdaptedPersonTest {
                 VALID_SYMPTOMS,
                 VALID_IC,
                 VALID_URGENCY_LEVEL,
-                VALID_DOCTOR_NAME,
-                VALID_NEXT_OF_KIN_PHONE
+                VALID_NEXT_OF_KIN_PHONE,
+                VALID_DOCTOR_NAME
         );
         String expectedMessage = String.format(MISSING_FIELD_MESSAGE_FORMAT, Email.class.getSimpleName());
         assertThrows(IllegalValueException.class, expectedMessage, person::toModelType);
@@ -165,8 +165,8 @@ public class JsonAdaptedPersonTest {
                         VALID_SYMPTOMS,
                         VALID_IC,
                         VALID_URGENCY_LEVEL,
-                        VALID_DOCTOR_NAME,
-                        VALID_NEXT_OF_KIN_PHONE
+                        VALID_NEXT_OF_KIN_PHONE,
+                        VALID_DOCTOR_NAME
                 );
         String expectedMessage = Address.MESSAGE_CONSTRAINTS;
         assertThrows(IllegalValueException.class, expectedMessage, person::toModelType);
@@ -182,8 +182,8 @@ public class JsonAdaptedPersonTest {
                 VALID_SYMPTOMS,
                 VALID_IC,
                 VALID_URGENCY_LEVEL,
-                VALID_DOCTOR_NAME,
-                VALID_NEXT_OF_KIN_PHONE
+                VALID_NEXT_OF_KIN_PHONE,
+                VALID_DOCTOR_NAME
         );
         String expectedMessage = String.format(MISSING_FIELD_MESSAGE_FORMAT, Address.class.getSimpleName());
         assertThrows(IllegalValueException.class, expectedMessage, person::toModelType);
@@ -202,8 +202,8 @@ public class JsonAdaptedPersonTest {
                         invalidSymptoms,
                         VALID_IC,
                         VALID_URGENCY_LEVEL,
-                        VALID_DOCTOR_NAME,
-                        VALID_NEXT_OF_KIN_PHONE
+                        VALID_NEXT_OF_KIN_PHONE,
+                        VALID_DOCTOR_NAME
 
                 );
         assertThrows(IllegalValueException.class, person::toModelType);
@@ -219,8 +219,8 @@ public class JsonAdaptedPersonTest {
                 VALID_SYMPTOMS,
                 null,
                 VALID_URGENCY_LEVEL,
-                VALID_DOCTOR_NAME,
-                VALID_NEXT_OF_KIN_PHONE
+                VALID_NEXT_OF_KIN_PHONE,
+                VALID_DOCTOR_NAME
         );
         String expectedMessage = String.format(MISSING_FIELD_MESSAGE_FORMAT, Ic.class.getSimpleName());
         assertThrows(IllegalValueException.class, expectedMessage, person::toModelType);
@@ -233,7 +233,7 @@ public class JsonAdaptedPersonTest {
                 VALID_PHONE,
                 VALID_EMAIL,
                 VALID_ADDRESS,
-                VALID_TAGS,
+                VALID_SYMPTOMS,
                 VALID_IC,
                 VALID_URGENCY_LEVEL,
                 VALID_DOCTOR_NAME,
@@ -254,8 +254,8 @@ public class JsonAdaptedPersonTest {
                         VALID_SYMPTOMS,
                         INVALID_IC,
                         VALID_URGENCY_LEVEL,
-                        VALID_DOCTOR_NAME,
-                        VALID_NEXT_OF_KIN_PHONE
+                        VALID_NEXT_OF_KIN_PHONE,
+                        VALID_DOCTOR_NAME
                 );
         String expectedMessage = Ic.MESSAGE_CONSTRAINTS;
         assertThrows(IllegalValueException.class, expectedMessage, person::toModelType);
@@ -272,8 +272,8 @@ public class JsonAdaptedPersonTest {
                         VALID_SYMPTOMS,
                         VALID_IC,
                         INVALID_URGENCY_LEVEL,
-                        VALID_DOCTOR_NAME,
-                        VALID_NEXT_OF_KIN_PHONE
+                        VALID_NEXT_OF_KIN_PHONE,
+                        VALID_DOCTOR_NAME
                 );
         String expectedMessage = UrgencyLevel.MESSAGE_CONSTRAINTS;
         assertThrows(IllegalValueException.class, expectedMessage, person::toModelType);
@@ -290,8 +290,8 @@ public class JsonAdaptedPersonTest {
                         VALID_SYMPTOMS,
                         VALID_IC,
                         null,
-                        VALID_DOCTOR_NAME,
-                        VALID_NEXT_OF_KIN_PHONE
+                        VALID_NEXT_OF_KIN_PHONE,
+                        VALID_DOCTOR_NAME
         );
         String expectedMessage = String.format(MISSING_FIELD_MESSAGE_FORMAT, UrgencyLevel.class.getSimpleName());
         assertThrows(IllegalValueException.class, expectedMessage, person::toModelType);
@@ -308,12 +308,13 @@ public class JsonAdaptedPersonTest {
                         VALID_SYMPTOMS,
                         VALID_IC,
                         VALID_URGENCY_LEVEL,
+                        VALID_NEXT_OF_KIN_PHONE,
                         INVALID_DOCTOR_NAME
                 );
         String expectedMessage = NextOfKinPhone.MESSAGE_CONSTRAINTS;
         assertThrows(IllegalValueException.class, expectedMessage, person::toModelType);
     }
-      
+
     @Test
     public void toModelType_invalidDoctorName_throwsIllegalValueException() {
         JsonAdaptedPerson person =

@@ -104,8 +104,8 @@ public class PersonTest {
                 + ", symptoms=" + ALICE.getSymptoms()
                 + ", ic=" + ALICE.getIc()
                 + ", urgencyLevel=" + ALICE.getUrgencyLevel()
-                + ", doctorName=" + ALICE.getDoctorName()
                 + ", nextOfKinPhone=" + ALICE.getNextOfKinPhone()
+                + ", doctorName=" + ALICE.getDoctorName()
                 + "}";
         assertEquals(expected, ALICE.toString());
     }
@@ -120,15 +120,15 @@ public class PersonTest {
         Person editedAlice = new PersonBuilder(ALICE).withNextOfKinPhone("81384393").build();
         assertNotEquals(ALICE.hashCode(), editedAlice.hashCode());
     }
-  
-  @Test
-  public void hashCode_includingDoctorName() {
+
+    @Test
+    public void hashCode_includingDoctorName() {
         // same values -> equal hashCode
         Person aliceCopy = new PersonBuilder(ALICE).build();
         assertEquals(ALICE.hashCode(), aliceCopy.hashCode());
-    
+
         // different doctorName -> different hashCode
         Person editedAlice = new PersonBuilder(ALICE).withDoctorName("Dr. John Doe").build();
         assertNotEquals(ALICE.hashCode(), editedAlice.hashCode());
-  }
+    }
 }

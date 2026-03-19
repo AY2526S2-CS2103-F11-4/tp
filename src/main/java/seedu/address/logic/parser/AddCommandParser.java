@@ -5,8 +5,8 @@ import static seedu.address.logic.parser.CliSyntax.PREFIX_ADDRESS;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_DOCTOR;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_EMAIL;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_IC;
-import static seedu.address.logic.parser.CliSyntax.PREFIX_PATIENT_NAME;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_NEXT_OF_KIN_PHONE;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_PATIENT_NAME;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_PATIENT_PHONE;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_SYMPTOM;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_URGENCY;
@@ -83,7 +83,9 @@ public class AddCommandParser implements Parser<AddCommand> {
                 .get());
         DoctorName doctorName = ParserUtil.parseDoctorName(argMultimap.getValue(PREFIX_DOCTOR).get());
 
-        Person person = new Person(name, phone, email, address, symptomList, ic, urgencyLevel, doctorName, nextOfKinPhone);
+
+        Person person = new Person(name, phone, email, address, symptomList, ic,
+                urgencyLevel, nextOfKinPhone, doctorName);
 
         return new AddCommand(person);
     }

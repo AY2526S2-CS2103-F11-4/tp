@@ -132,7 +132,8 @@ public class PersonBuilder {
         this.nextOfKinPhone = new NextOfKinPhone(nextOfKinPhone);
         return this;
     }
-  
+
+    /**
      * Sets the {@code DoctorName} of the {@code Person} that we are building.
      */
     public PersonBuilder withDoctorName(String doctorName) {
@@ -141,10 +142,6 @@ public class PersonBuilder {
     }
 
     public Person build() {
-        return new Person(name, phone, email, address, symptoms, ic, urgencyLevel, doctorName);
-    }
-
-    public Person build() {
-        return new Person(name, phone, email, address, tags, ic, urgencyLevel, nextOfKinPhone);
+        return new Person(name, phone, email, address, symptoms, ic, urgencyLevel, nextOfKinPhone, doctorName);
     }
 }

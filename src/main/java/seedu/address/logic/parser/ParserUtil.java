@@ -181,7 +181,7 @@ public class ParserUtil {
         requireNonNull(name);
         String trimmedDoctorName = name.trim();
         if (!DoctorName.isValidName(trimmedDoctorName)) {
-            throw new ParseException(Address.MESSAGE_CONSTRAINTS);
+            throw new ParseException(DoctorName.MESSAGE_CONSTRAINTS);
         }
         return new DoctorName(trimmedDoctorName);
     }

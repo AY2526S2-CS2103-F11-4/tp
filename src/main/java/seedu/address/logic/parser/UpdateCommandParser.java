@@ -6,8 +6,8 @@ import static seedu.address.logic.parser.CliSyntax.PREFIX_ADDRESS;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_DOCTOR;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_EMAIL;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_IC;
-import static seedu.address.logic.parser.CliSyntax.PREFIX_PATIENT_NAME;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_NEXT_OF_KIN_PHONE;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_PATIENT_NAME;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_PATIENT_PHONE;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_SYMPTOM;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_URGENCY;
@@ -62,8 +62,9 @@ public class UpdateCommandParser implements Parser<UpdateCommand> {
                 PREFIX_ADDRESS,
                 PREFIX_IC,
                 PREFIX_URGENCY,
-                PREFIX_NEXT_OF_KIN_PHONE
-                PREFIX_DOCTOR);
+                PREFIX_NEXT_OF_KIN_PHONE,
+                PREFIX_DOCTOR
+        );
 
         UpdatePersonDescriptor updatePersonDescriptor = new UpdatePersonDescriptor();
 
