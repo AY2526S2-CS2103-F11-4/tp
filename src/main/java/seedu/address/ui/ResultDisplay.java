@@ -25,4 +25,9 @@ public class ResultDisplay extends UiPart<Region> {
         resultDisplay.setText(feedbackToUser);
     }
 
+    public void setStyle(String style) {
+        requireNonNull(style);
+        resultDisplay.getStyleClass().removeAll("success", "exception");
+        resultDisplay.getStyleClass().add(style);
+    }
 }

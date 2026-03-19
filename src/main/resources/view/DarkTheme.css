@@ -337,6 +337,14 @@
     -fx-background-radius: 0;
 }
 
+#resultDisplay.success .content {
+    -fx-background-color: transparent, #4CAF50, transparent, #4CAF50;
+}
+
+#resultDisplay.exception .content {
+    -fx-background-color: transparent, #F44336, transparent, #F44336;
+}
+
 #symptoms {
     -fx-hgap: 7;
     -fx-vgap: 3;
