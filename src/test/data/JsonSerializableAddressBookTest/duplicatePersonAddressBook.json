@@ -7,7 +7,10 @@
     "symptoms": [ "friends" ],
     "ic": "T1212123A",
     "urgencyLevel": "low",
-    "doctorName": "Ben Leong"
+    "nextOfKinPhone": "91748274",
+    "doctorName": "Ben Leong",
+    "nextOfKin" : "Johnny",
+    "notes": "cannot stop talking"
   }, {
     "name": "Alice Pauline",
     "phone": "94351253",
@@ -15,6 +18,9 @@
     "address": "4th street",
     "ic": "T1212123A",
     "urgencyLevel": "low",
-    "doctorName": "Ben Leong"
+    "nextOfKinPhone": "92846294",
+    "doctorName": "Ben Leong",
+    "nextOfKin" : "John",
+    "notes": "Christian"
   } ]
 }
