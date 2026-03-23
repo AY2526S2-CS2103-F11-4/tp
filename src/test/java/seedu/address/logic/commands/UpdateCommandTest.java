@@ -151,6 +151,55 @@ public class UpdateCommandTest {
     }
 
     @Test
+    public void execute_appendNoteToExistingNote_success() throws Exception {
+        // Covers lines 144-145: Testing the "else" block (adding to existing text)
+        Person personToUpdate = model.getFilteredPersonList().get(INDEX_FIRST_PERSON.getZeroBased());
+        String originalNote = personToUpdate.getNotes().toString();
+        String textToAppend = "More info";
+
+        UpdatePersonDescriptor descriptor = new UpdatePersonDescriptor();
+        descriptor.setNotesToAppend(textToAppend);
+        UpdateCommand updateCommand = new UpdateCommand(INDEX_FIRST_PERSON, descriptor);
+
+        String expectedNote = originalNote + "\n" + textToAppend;
+        updateCommand.execute(model);
+
+        assertEquals(expectedNote, model.getFilteredPersonList().get(0).getNotes().toString());
+    }
+
+    @Test
+    public void execute_appendNoteToEmptyNote_success() throws Exception {
+        // Covers line 142: Testing the case where the patient currently has no notes ("-" or empty)
+        // First, clear the note for the first person
+        model.setPerson(model.getFilteredPersonList().get(0),
+                new PersonBuilder(model.getFilteredPersonList().get(0)).withNotes("").build());
+
+        String textToAppend = "First Note";
+        UpdatePersonDescriptor descriptor = new UpdatePersonDescriptor();
+        descriptor.setNotesToAppend(textToAppend);
+        UpdateCommand updateCommand = new UpdateCommand(INDEX_FIRST_PERSON, descriptor);
+
+        updateCommand.execute(model);
+
+        // Should NOT have a leading newline since original was empty
+        assertEquals(textToAppend, model.getFilteredPersonList().get(0).getNotes().toString());
+    }
+
+    @Test
+    public void execute_appendNoteExceedsLimit_throwsCommandException() {
+        // Covers the character limit safety net (usually around line 149-150 in UpdateCommand)
+        // We use a repeat count that is likely to exceed your Notes.MAX_LENGTH
+        String veryLongNote = "a".repeat(1001);
+        UpdatePersonDescriptor descriptor = new UpdatePersonDescriptorBuilder()
+                .withNotesToAppend(veryLongNote).build();
+        UpdateCommand updateCommand = new UpdateCommand(INDEX_FIRST_PERSON, descriptor);
+
+        // We use assertCommandFailure to ensure the system correctly blocks the update
+        assertCommandFailure(updateCommand, model, "Appending this text exceeds the note character constraints. "
+                + seedu.address.model.person.Notes.MESSAGE_CONSTRAINTS);
+    }
+
+    @Test
     public void equals() {
         final UpdateCommand standardCommand = new UpdateCommand(INDEX_FIRST_PERSON, DESC_AMY);
 

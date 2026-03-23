@@ -52,7 +52,7 @@ public class UpdateCommandParserTest {
     private static final String MESSAGE_INVALID_FORMAT =
             String.format(MESSAGE_INVALID_COMMAND_FORMAT, UpdateCommand.MESSAGE_USAGE);
 
-    private UpdateCommandParser parser = new UpdateCommandParser();
+    private final UpdateCommandParser parser = new UpdateCommandParser();
 
     @Test
     public void parse_missingParts_failure() {
@@ -205,6 +205,32 @@ public class UpdateCommandParserTest {
         String userInput = targetIndex.getOneBased() + SYMPTOM_EMPTY;
 
         UpdatePersonDescriptor descriptor = new UpdatePersonDescriptorBuilder().withSymptoms().build();
+        UpdateCommand expectedCommand = new UpdateCommand(targetIndex, descriptor);
+
+        assertParseSuccess(parser, userInput, expectedCommand);
+    }
+
+    @Test
+    public void parse_conflictingNotesPrefixes_throwsParseException() {
+        // Covers the red line 79: Testing the mutual exclusivity guard
+        assertParseFailure(parser, "1 n/New Note an/Append Note",
+                "You cannot overwrite a note (n/) and append to a note (an/) in the same command.");
+    }
+
+    @Test
+    public void parse_emptyAppendNote_throwsParseException() {
+        // Covers red line 126: Testing the .trim().isEmpty() guard
+        assertParseFailure(parser, "1 an/  ",
+                "The text to append cannot be empty. If you want to clear the note, use n/ instead.");
+    }
+
+    @Test
+    public void parse_appendNotePresent_success() {
+        // Covers red line 130: Testing that a valid an/ prefix actually sets the descriptor
+        Index targetIndex = INDEX_FIRST_PERSON;
+        String userInput = targetIndex.getOneBased() + " an/Append this";
+        UpdatePersonDescriptor descriptor = new UpdatePersonDescriptorBuilder()
+                .withNotesToAppend("Append this").build();
         UpdateCommand expectedCommand = new UpdateCommand(targetIndex, descriptor);
 
         assertParseSuccess(parser, userInput, expectedCommand);
