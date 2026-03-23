@@ -1,5 +1,7 @@
 package seedu.address.logic.commands;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import static java.util.Objects.requireNonNull;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_ADDRESS;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_APPEND_NOTES;
@@ -129,7 +131,6 @@ public class UpdateCommand extends Command {
         DoctorName updatedDoctorName = updatePersonDescriptor.getDoctorName().orElse(personToUpdate.getDoctorName());
         NextOfKin updatedNextOfKin = updatePersonDescriptor.getNextOfKin().orElse(personToUpdate.getNextOfKin());
 
-        // NEW: BUG-PROOF APPEND LOGIC
         Notes updatedNotes = personToUpdate.getNotes();
 
         if (updatePersonDescriptor.getNotes().isPresent()) {
@@ -138,14 +139,17 @@ public class UpdateCommand extends Command {
             String existingNotesText = personToUpdate.getNotes().toString();
             String textToAppend = updatePersonDescriptor.getNotesToAppend().get();
 
+            // Generate timestamp: e.g., [24 Mar 05:01]
+            String timestamp = LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd MMM HH:mm"));
+            String formattedAppend = "[" + timestamp + "] " + textToAppend;
+
             String combinedText;
             if (existingNotesText == null || existingNotesText.trim().isEmpty() || existingNotesText.equals("-")) {
-                combinedText = textToAppend;
+                combinedText = formattedAppend;
             } else {
-                combinedText = existingNotesText + "\n" + textToAppend;
+                combinedText = existingNotesText + "\n" + formattedAppend;
             }
 
-            // Re-run the validation on the combined string
             if (!Notes.isValidNotes(combinedText)) {
                 throw new CommandException("Appending this text exceeds the note character constraints. "
                         + Notes.MESSAGE_CONSTRAINTS);
@@ -154,17 +158,9 @@ public class UpdateCommand extends Command {
             updatedNotes = new Notes(combinedText);
         }
 
-        return new Person(updatedName,
-                updatedPhone,
-                updatedEmail,
-                updatedAddress,
-                updatedSymptoms,
-                updatedIc,
-                updatedUrgencyLevel,
-                updatedNextOfKinPhone,
-                updatedDoctorName,
-                updatedNextOfKin,
-                updatedNotes);
+        return new Person(updatedName, updatedPhone, updatedEmail, updatedAddress, updatedSymptoms,
+                updatedIc, updatedUrgencyLevel, updatedNextOfKinPhone, updatedDoctorName,
+                updatedNextOfKin, updatedNotes);
     }
 
     @Override

@@ -1,5 +1,7 @@
 package seedu.address.logic.commands;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -152,7 +154,6 @@ public class UpdateCommandTest {
 
     @Test
     public void execute_appendNoteToExistingNote_success() throws Exception {
-        // Covers lines 144-145: Testing the "else" block (adding to existing text)
         Person personToUpdate = model.getFilteredPersonList().get(INDEX_FIRST_PERSON.getZeroBased());
         String originalNote = personToUpdate.getNotes().toString();
         String textToAppend = "More info";
@@ -161,7 +162,10 @@ public class UpdateCommandTest {
         descriptor.setNotesToAppend(textToAppend);
         UpdateCommand updateCommand = new UpdateCommand(INDEX_FIRST_PERSON, descriptor);
 
-        String expectedNote = originalNote + "\n" + textToAppend;
+        // FIX: Generate the matching timestamp used in UpdateCommand
+        String timestamp = LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd MMM HH:mm"));
+        String expectedNote = originalNote + "\n" + "[" + timestamp + "] " + textToAppend;
+
         updateCommand.execute(model);
 
         assertEquals(expectedNote, model.getFilteredPersonList().get(0).getNotes().toString());
@@ -169,8 +173,6 @@ public class UpdateCommandTest {
 
     @Test
     public void execute_appendNoteToEmptyNote_success() throws Exception {
-        // Covers line 142: Testing the case where the patient currently has no notes ("-" or empty)
-        // First, clear the note for the first person
         model.setPerson(model.getFilteredPersonList().get(0),
                 new PersonBuilder(model.getFilteredPersonList().get(0)).withNotes("").build());
 
@@ -179,10 +181,13 @@ public class UpdateCommandTest {
         descriptor.setNotesToAppend(textToAppend);
         UpdateCommand updateCommand = new UpdateCommand(INDEX_FIRST_PERSON, descriptor);
 
+        // FIX: Generate the matching timestamp
+        String timestamp = LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd MMM HH:mm"));
+        String expectedNote = "[" + timestamp + "] " + textToAppend;
+
         updateCommand.execute(model);
 
-        // Should NOT have a leading newline since original was empty
-        assertEquals(textToAppend, model.getFilteredPersonList().get(0).getNotes().toString());
+        assertEquals(expectedNote, model.getFilteredPersonList().get(0).getNotes().toString());
     }
 
     @Test
@@ -201,10 +206,7 @@ public class UpdateCommandTest {
 
     @Test
     public void execute_appendNoteToNoteWithExistingContent_success() {
-        // Covers the "False" branch of line 142 (existingNotesText is NOT empty)
         Person personToUpdate = model.getFilteredPersonList().get(INDEX_FIRST_PERSON.getZeroBased());
-
-        // Ensure the person definitely has existing notes
         Person personWithNotes = new PersonBuilder(personToUpdate).withNotes("Initial Note").build();
         model.setPerson(personToUpdate, personWithNotes);
 
@@ -213,10 +215,11 @@ public class UpdateCommandTest {
                 .withNotesToAppend(textToAppend).build();
         UpdateCommand updateCommand = new UpdateCommand(INDEX_FIRST_PERSON, descriptor);
 
-        // This forces the "else" block (line 144) to run: combinedText = existing + "\n" + append
-        String expectedNote = "Initial Note" + "\n" + textToAppend;
-        Person editedPerson = new PersonBuilder(personWithNotes).withNotes(expectedNote).build();
+        // FIX: Generate the matching timestamp
+        String timestamp = LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd MMM HH:mm"));
+        String expectedNote = "Initial Note" + "\n" + "[" + timestamp + "] " + textToAppend;
 
+        Person editedPerson = new PersonBuilder(personWithNotes).withNotes(expectedNote).build();
         String expectedMessage = String.format(UpdateCommand.MESSAGE_UPDATE_PERSON_SUCCESS,
                 Messages.format(editedPerson));
         Model expectedModel = new ModelManager(new AddressBook(model.getAddressBook()), new UserPrefs());
@@ -227,7 +230,6 @@ public class UpdateCommandTest {
 
     @Test
     public void execute_appendNoteToNoteWithDash_success() {
-        // Covers the "existingNotesText.equals("-")" branch of line 142
         Person personToUpdate = model.getFilteredPersonList().get(INDEX_FIRST_PERSON.getZeroBased());
         Person personWithDash = new PersonBuilder(personToUpdate).withNotes("-").build();
         model.setPerson(personToUpdate, personWithDash);
@@ -237,8 +239,11 @@ public class UpdateCommandTest {
                 .withNotesToAppend(textToAppend).build();
         UpdateCommand updateCommand = new UpdateCommand(INDEX_FIRST_PERSON, descriptor);
 
-        // Since original was "-", it should just become the text (no leading newline)
-        Person editedPerson = new PersonBuilder(personWithDash).withNotes(textToAppend).build();
+        // FIX: Generate the matching timestamp
+        String timestamp = LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd MMM HH:mm"));
+        String expectedNote = "[" + timestamp + "] " + textToAppend;
+
+        Person editedPerson = new PersonBuilder(personWithDash).withNotes(expectedNote).build();
         String expectedMessage = String.format(UpdateCommand.MESSAGE_UPDATE_PERSON_SUCCESS,
                 Messages.format(editedPerson));
         Model expectedModel = new ModelManager(new AddressBook(model.getAddressBook()), new UserPrefs());
