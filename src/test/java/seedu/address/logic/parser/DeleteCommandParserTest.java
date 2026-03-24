@@ -154,8 +154,13 @@ public class DeleteCommandParserTest {
     }
 
     @Test
-    public void parse_invalidArgsFieldPrefixWithValue_throwsParseException() {
+    public void parse_invalidArgsNotesPrefixWithValue_throwsParseException() {
         assertParseFailure(parser, "1 n/notes", DeleteCommand.MESSAGE_VALUE_NOT_ALLOWED);
+    }
+
+    @Test
+    public void parse_invalidArgsSymptomsPrefixWithValue_throwsParseException() {
+        assertParseFailure(parser, "1 s/symptom", DeleteCommand.MESSAGE_VALUE_NOT_ALLOWED);
     }
 
     @Test
