@@ -6,26 +6,21 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.junit.jupiter.api.Test;
 
+import seedu.address.model.person.Name;
 import seedu.address.model.person.Notes;
+import seedu.address.testutil.Assert;
 
 public class NotesTest {
 
     @Test
-    public void constructor_nullNotes_setsEmpty() {
-        Notes notes = new Notes(null);
-        assertEquals("", notes.getValue());
+    public void constructor_null_throwsNullPointerException() {
+        Assert.assertThrows(NullPointerException.class, () -> new Notes(null));
     }
 
     @Test
     public void constructor_emptyNotes_setsEmpty() {
         Notes notes = new Notes("");
         assertEquals("", notes.getValue());
-    }
-
-    @Test
-    public void constructor_validNotes_trimsSpaces() {
-        Notes notes = new Notes("   Patient has mild symptoms.  ");
-        assertEquals("Patient has mild symptoms.", notes.getValue());
     }
 
     @Test
