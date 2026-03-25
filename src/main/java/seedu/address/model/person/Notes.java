@@ -40,6 +40,21 @@ public class Notes {
         return value;
     }
 
+    /**
+     * Appends the given Notes to this current Notes.
+     * Returns a new Notes object containing the combined text.
+     */
+    public Notes append(Notes additionalNotes) {
+        String existingText = this.value;
+        String textToAppend = additionalNotes.value;
+
+        if (existingText == null || existingText.trim().isEmpty() || existingText.equals("-")) {
+            return new Notes(textToAppend);
+        } else {
+            return new Notes(existingText + "\n" + textToAppend);
+        }
+    }
+
     @Override
     public String toString() {
         return value;
