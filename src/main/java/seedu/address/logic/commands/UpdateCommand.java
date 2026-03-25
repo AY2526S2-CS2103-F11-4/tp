@@ -15,8 +15,6 @@ import static seedu.address.logic.parser.CliSyntax.PREFIX_SYMPTOM;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_URGENCY;
 import static seedu.address.model.Model.PREDICATE_SHOW_ALL_PERSONS;
 
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
@@ -112,7 +110,6 @@ public class UpdateCommand extends Command {
     /**
      * Creates and returns a {@code Person} with the details of {@code personToEdit}
      * edited with {@code editPersonDescriptor}.
-     * * NEW: Added "throws CommandException" to signature so we can safely block notes that get too long.
      */
     private static Person createUpdatedPerson(Person personToUpdate, UpdatePersonDescriptor updatePersonDescriptor)
             throws CommandException {
@@ -136,26 +133,13 @@ public class UpdateCommand extends Command {
         if (updatePersonDescriptor.getNotes().isPresent()) {
             updatedNotes = updatePersonDescriptor.getNotes().get();
         } else if (updatePersonDescriptor.getNotesToAppend().isPresent()) {
-            String existingNotesText = personToUpdate.getNotes().toString();
-            String textToAppend = updatePersonDescriptor.getNotesToAppend().get();
-
-            // Generate timestamp: e.g., [24 Mar 05:01]
-            String timestamp = LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd MMM HH:mm"));
-            String formattedAppend = "[" + timestamp + "] " + textToAppend;
-
-            String combinedText;
-            if (existingNotesText == null || existingNotesText.trim().isEmpty() || existingNotesText.equals("-")) {
-                combinedText = formattedAppend;
-            } else {
-                combinedText = existingNotesText + "\n" + formattedAppend;
-            }
-
-            if (!Notes.isValidNotes(combinedText)) {
+            try {
+                updatedNotes = personToUpdate.getNotes().append(updatePersonDescriptor.getNotesToAppend().get());
+            } catch (IllegalArgumentException e) {
+                // Catches the error if the combined note exceeds character constraints
                 throw new CommandException("Appending this text exceeds the note character constraints. "
                         + Notes.MESSAGE_CONSTRAINTS);
             }
-
-            updatedNotes = new Notes(combinedText);
         }
 
         return new Person(updatedName, updatedPhone, updatedEmail, updatedAddress, updatedSymptoms,
@@ -169,7 +153,6 @@ public class UpdateCommand extends Command {
             return true;
         }
 
-        // instanceof handles nulls
         if (!(other instanceof UpdateCommand otherUpdateCommand)) {
             return false;
         }
@@ -202,7 +185,7 @@ public class UpdateCommand extends Command {
         private DoctorName doctorName;
         private NextOfKin nextOfKin;
         private Notes notes;
-        private String notesToAppend; // NEW FIELD
+        private Notes notesToAppend; // CHANGED to Notes
 
         public UpdatePersonDescriptor() {}
 
@@ -222,14 +205,10 @@ public class UpdateCommand extends Command {
             setDoctorName(toCopy.doctorName);
             setNextOfKin(toCopy.nextOfKin);
             setNotes(toCopy.notes);
-            setNotesToAppend(toCopy.notesToAppend); // NEW
+            setNotesToAppend(toCopy.notesToAppend);
         }
 
-        /**
-         * Returns true if at least one field is edited.
-         */
         public boolean isAnyFieldEdited() {
-            // NEW: Added notesToAppend to CollectionUtil check
             return CollectionUtil.isAnyNonNull(name, phone, email, address,
                     symptoms, urgencyLevel, ic, nextOfKinPhone, doctorName, nextOfKin, notes, notesToAppend);
         }
@@ -298,28 +277,20 @@ public class UpdateCommand extends Command {
             return Optional.ofNullable(notes);
         }
 
-        // NEW: Getter and Setter for notesToAppend
-        public void setNotesToAppend(String notesToAppend) {
+        // CHANGED to Notes
+        public void setNotesToAppend(Notes notesToAppend) {
             this.notesToAppend = notesToAppend;
         }
 
-        public Optional<String> getNotesToAppend() {
+        // CHANGED to Notes
+        public Optional<Notes> getNotesToAppend() {
             return Optional.ofNullable(notesToAppend);
         }
 
-        /**
-         * Sets {@code symptoms} to this object's {@code symptoms}.
-         * A defensive copy of {@code symptoms} is used internally.
-         */
         public void setSymptoms(Set<Symptom> symptoms) {
             this.symptoms = (symptoms != null) ? new HashSet<>(symptoms) : null;
         }
 
-        /**
-         * Returns an unmodifiable symptom set, which throws {@code UnsupportedOperationException}
-         * if modification is attempted.
-         * Returns {@code Optional#empty()} if {@code symptoms} is null.
-         */
         public Optional<Set<Symptom>> getSymptoms() {
             return (symptoms != null) ? Optional.of(Collections.unmodifiableSet(symptoms)) : Optional.empty();
         }
@@ -346,7 +317,6 @@ public class UpdateCommand extends Command {
                 return true;
             }
 
-            // instanceof handles nulls
             if (!(other instanceof UpdatePersonDescriptor otherUpdatePersonDescriptor)) {
                 return false;
             }
@@ -362,7 +332,7 @@ public class UpdateCommand extends Command {
                     && Objects.equals(doctorName, otherUpdatePersonDescriptor.doctorName)
                     && Objects.equals(nextOfKin, otherUpdatePersonDescriptor.nextOfKin)
                     && Objects.equals(notes, otherUpdatePersonDescriptor.notes)
-                    && Objects.equals(notesToAppend, otherUpdatePersonDescriptor.notesToAppend); // NEW
+                    && Objects.equals(notesToAppend, otherUpdatePersonDescriptor.notesToAppend);
         }
 
         @Override
@@ -379,7 +349,7 @@ public class UpdateCommand extends Command {
                     .add("doctorName", doctorName)
                     .add("nextOfKin", nextOfKin)
                     .add("notes", notes)
-                    .add("notesToAppend", notesToAppend) // NEW
+                    .add("notesToAppend", notesToAppend)
                     .toString();
         }
     }
