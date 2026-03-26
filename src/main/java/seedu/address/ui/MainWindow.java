@@ -186,6 +186,7 @@ public class MainWindow extends UiPart<Stage> {
             }
 
             if (commandResult.isExit()) {
+                commandBoxPlaceholder.setDisable(true);
                 delayExit();
             }
 
