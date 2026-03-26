@@ -46,7 +46,7 @@ import seedu.address.model.symptom.Symptom;
 /**
  * Updates the details of an existing person in the address book.
  */
-public class UpdateCommand extends Command {
+public class SingleUpdateCommand extends Command {
 
     public static final String COMMAND_WORD = "update";
 
@@ -84,7 +84,7 @@ public class UpdateCommand extends Command {
      * @param index of the person in the filtered person list to edit
      * @param updatePersonDescriptor details to edit the person with
      */
-    public UpdateCommand(Index index, UpdatePersonDescriptor updatePersonDescriptor) {
+    public SingleUpdateCommand(Index index, UpdatePersonDescriptor updatePersonDescriptor) {
         requireNonNull(index);
         requireNonNull(updatePersonDescriptor);
 
@@ -134,7 +134,7 @@ public class UpdateCommand extends Command {
      * Creates and returns a {@code Person} with the details of {@code personToEdit}
      * edited with {@code editPersonDescriptor}.
      */
-    private static Person createUpdatedPerson(Person personToUpdate, UpdatePersonDescriptor updatePersonDescriptor)
+    public static Person createUpdatedPerson(Person personToUpdate, UpdatePersonDescriptor updatePersonDescriptor)
             throws CommandException {
         assert personToUpdate != null;
 
@@ -180,7 +180,7 @@ public class UpdateCommand extends Command {
             return true;
         }
 
-        if (!(other instanceof UpdateCommand otherUpdateCommand)) {
+        if (!(other instanceof SingleUpdateCommand otherUpdateCommand)) {
             return false;
         }
 

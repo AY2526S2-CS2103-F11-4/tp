@@ -18,26 +18,30 @@ import static seedu.address.logic.parser.CliSyntax.PREFIX_URGENCY;
 
 import java.util.Collection;
 import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
 import seedu.address.commons.core.index.Index;
-import seedu.address.logic.commands.UpdateCommand;
-import seedu.address.logic.commands.UpdateCommand.UpdatePersonDescriptor;
+import seedu.address.logic.commands.Command;
+import seedu.address.logic.commands.MultipleUpdateCommand;
+import seedu.address.logic.commands.SingleUpdateCommand;
+import seedu.address.logic.commands.SingleUpdateCommand.UpdatePersonDescriptor;
 import seedu.address.logic.parser.exceptions.ParseException;
 import seedu.address.model.symptom.Symptom;
 
 /**
  * Parses input arguments and creates a new UpdateCommand object
  */
-public class UpdateCommandParser implements Parser<UpdateCommand> {
+public class UpdateCommandParser implements Parser<Command> {
 
     /**
      * Parses the given {@code String} of arguments in the context of the UpdateCommand
-     * and returns an UpdateCommand object for execution.
-     * @throws ParseException if the user input does not conform the expected format
+     * and returns an UpdateCommand object (either Single or Multiple) for execution.
+     * @throws ParseException if the user input does not conform to the expected format
      */
-    public UpdateCommand parse(String args) throws ParseException {
+    @Override
+    public Command parse(String args) throws ParseException {
         requireNonNull(args);
         ArgumentMultimap argMultimap =
                 ArgumentTokenizer.tokenize(args,
@@ -53,16 +57,38 @@ public class UpdateCommandParser implements Parser<UpdateCommand> {
                         PREFIX_NEXT_OF_KIN,
                         PREFIX_NEXT_OF_KIN_RELATIONSHIP,
                         PREFIX_NOTES,
-                        PREFIX_APPEND_NOTES // NEW: Added to tokenizer
+                        PREFIX_APPEND_NOTES
                 );
 
-        Index index;
+        // --- OUR MULTIPLE INDEX LOGIC ---
+        String trimmedPreamble = argMultimap.getPreamble().trim();
+
+        if (trimmedPreamble.isEmpty()) {
+            throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT,
+                    SingleUpdateCommand.MESSAGE_USAGE));
+        }
+
+        // STRICT RULE: Check the TRIMMED preamble for spaces.
+        if (trimmedPreamble.contains(",") && trimmedPreamble.contains(" ")) {
+            throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT,
+                    SingleUpdateCommand.MESSAGE_USAGE));
+        }
+
+        boolean isMultiple = trimmedPreamble.contains(",");
+        List<Index> indices = null;
+        Index singleIndex = null;
 
         try {
-            index = ParserUtil.parseIndex(argMultimap.getPreamble());
+            if (isMultiple) {
+                indices = ParserUtil.parseIndices(trimmedPreamble);
+            } else {
+                singleIndex = ParserUtil.parseIndex(trimmedPreamble);
+            }
         } catch (ParseException pe) {
-            throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT, UpdateCommand.MESSAGE_USAGE), pe);
+            throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT,
+                    SingleUpdateCommand.MESSAGE_USAGE), pe);
         }
+        // --------------------------------
 
         argMultimap.verifyNoDuplicatePrefixesFor(PREFIX_PATIENT_NAME,
                 PREFIX_PATIENT_PHONE,
@@ -77,7 +103,7 @@ public class UpdateCommandParser implements Parser<UpdateCommand> {
                 PREFIX_NOTES,
                 PREFIX_APPEND_NOTES);
 
-        // NEW: BUG PREVENTION: Prevent overwrite (n/) and append (an/) at the same time
+        // Prevent overwrite (n/) and append (an/) at the same time
         if (argMultimap.getValue(PREFIX_NOTES).isPresent() && argMultimap.getValue(PREFIX_APPEND_NOTES).isPresent()) {
             throw new ParseException("You cannot overwrite a note (n/) "
                     + "and append to a note (an/) in the same command.");
@@ -95,64 +121,63 @@ public class UpdateCommandParser implements Parser<UpdateCommand> {
             updatePersonDescriptor.setEmail(ParserUtil.parseEmail(argMultimap.getValue(PREFIX_EMAIL).get()));
         }
         if (argMultimap.getValue(PREFIX_URGENCY).isPresent()) {
-            updatePersonDescriptor.setUrgencyLevel(ParserUtil.parseUrgencyLevel(argMultimap.getValue(PREFIX_URGENCY)
-                    .get()));
+            updatePersonDescriptor.setUrgencyLevel(ParserUtil
+                    .parseUrgencyLevel(argMultimap.getValue(PREFIX_URGENCY).get()));
         }
         if (argMultimap.getValue(PREFIX_ADDRESS).isPresent()) {
             updatePersonDescriptor.setAddress(ParserUtil.parseAddress(argMultimap.getValue(PREFIX_ADDRESS).get()));
         }
-
         if (argMultimap.getValue(PREFIX_IC).isPresent()) {
             updatePersonDescriptor.setIc(ParserUtil.parseIc(argMultimap.getValue(PREFIX_IC).get()));
         }
-
         if (argMultimap.getValue(PREFIX_NEXT_OF_KIN_PHONE).isPresent()) {
             updatePersonDescriptor.setNextOfKinPhone(ParserUtil
                     .parseNextOfKinPhone(argMultimap.getValue(PREFIX_NEXT_OF_KIN_PHONE).get()));
         }
-
         if (argMultimap.getValue(PREFIX_DOCTOR).isPresent()) {
-            updatePersonDescriptor.setDoctorName(ParserUtil.parseDoctorName(argMultimap.getValue(PREFIX_DOCTOR).get()));
+            updatePersonDescriptor.setDoctorName(ParserUtil
+                    .parseDoctorName(argMultimap.getValue(PREFIX_DOCTOR).get()));
         }
-
         if (argMultimap.getValue(PREFIX_NEXT_OF_KIN).isPresent()) {
-            updatePersonDescriptor.setNextOfKin(ParserUtil.parseNextOfKin(argMultimap.getValue(PREFIX_NEXT_OF_KIN)
-                    .get()));
+            updatePersonDescriptor.setNextOfKin(ParserUtil
+                    .parseNextOfKin(argMultimap.getValue(PREFIX_NEXT_OF_KIN).get()));
         }
 
+        // --- TEAMMATE's NEW FIELD ---
         if (argMultimap.getValue(PREFIX_NEXT_OF_KIN_RELATIONSHIP).isPresent()) {
             updatePersonDescriptor.setNextOfKinRelationship(ParserUtil
                     .parseNextOfKinRelationship(argMultimap.getValue(PREFIX_NEXT_OF_KIN_RELATIONSHIP).get()));
         }
+        // -----------------------------
 
         if (argMultimap.getValue(PREFIX_NOTES).isPresent()) {
             updatePersonDescriptor.setNotes(ParserUtil.parseNotes(argMultimap.getValue(PREFIX_NOTES).get()));
         }
 
-
-        // NEW: Handle Append Note & block empty strings
+        // Handle Append Note & block empty strings
         if (argMultimap.getValue(PREFIX_APPEND_NOTES).isPresent()) {
             String notesToAppend = argMultimap.getValue(PREFIX_APPEND_NOTES).get().trim();
-
-
+            if (notesToAppend.isEmpty()) {
+                throw new ParseException("The text to append cannot be empty. "
+                        + "If you want to clear the note, use n/ instead.");
+            }
             updatePersonDescriptor.setNotesToAppend(ParserUtil.parseNotes(notesToAppend));
         }
 
         parseSymptomsForEdit(argMultimap.getAllValues(PREFIX_SYMPTOM)).ifPresent(updatePersonDescriptor::setSymptoms);
 
-
         if (!updatePersonDescriptor.isAnyFieldEdited()) {
-            throw new ParseException(UpdateCommand.MESSAGE_NOT_UPDATED);
+            throw new ParseException(SingleUpdateCommand.MESSAGE_NOT_UPDATED);
         }
 
-        return new UpdateCommand(index, updatePersonDescriptor);
+        // --- OUR MULTIPLE COMMAND RETURN LOGIC ---
+        if (isMultiple) {
+            return new MultipleUpdateCommand(indices, updatePersonDescriptor);
+        } else {
+            return new SingleUpdateCommand(singleIndex, updatePersonDescriptor);
+        }
     }
 
-    /**
-     * Parses {@code Collection<String> symptoms} into a {@code Set<Symptom>} if {@code symptoms} is non-empty.
-     * If {@code symptoms} contain only one element which is an empty string, it will be parsed into a
-     * {@code Set<Symptom>} containing zero symptoms.
-     */
     private Optional<Set<Symptom>> parseSymptomsForEdit(Collection<String> symptoms) throws ParseException {
         assert symptoms != null;
 
@@ -163,5 +188,4 @@ public class UpdateCommandParser implements Parser<UpdateCommand> {
                 ? Collections.emptySet() : symptoms;
         return Optional.of(ParserUtil.parseSymptoms(symptomSet));
     }
-
 }

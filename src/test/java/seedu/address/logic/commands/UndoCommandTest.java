@@ -87,10 +87,10 @@ public class UndoCommandTest {
         Model model = new ModelManager(getTypicalAddressBook(), new UserPrefs());
         Person originalPerson = model.getFilteredPersonList().get(INDEX_FIRST_PERSON.getZeroBased());
 
-        UpdateCommand.UpdatePersonDescriptor descriptor = new UpdateCommand.UpdatePersonDescriptor();
+        SingleUpdateCommand.UpdatePersonDescriptor descriptor = new SingleUpdateCommand.UpdatePersonDescriptor();
         descriptor.setName(new PersonBuilder().build().getName());
 
-        UpdateCommand updateCommand = new UpdateCommand(INDEX_FIRST_PERSON, descriptor);
+        SingleUpdateCommand updateCommand = new SingleUpdateCommand(INDEX_FIRST_PERSON, descriptor);
         updateCommand.execute(model);
 
         // Verify person was updated

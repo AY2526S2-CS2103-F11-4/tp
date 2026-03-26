@@ -18,7 +18,7 @@ import static seedu.address.logic.commands.CommandTestUtil.VALID_SYMPTOM_HUSBAND
 
 import org.junit.jupiter.api.Test;
 
-import seedu.address.logic.commands.UpdateCommand.UpdatePersonDescriptor;
+import seedu.address.logic.commands.SingleUpdateCommand.UpdatePersonDescriptor;
 import seedu.address.testutil.UpdatePersonDescriptorBuilder;
 
 public class UpdatePersonDescriptorTest {
