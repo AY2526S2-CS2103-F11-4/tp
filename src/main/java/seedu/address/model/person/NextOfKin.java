@@ -1,5 +1,8 @@
 package seedu.address.model.person;
 
+import static java.util.Objects.requireNonNull;
+import static seedu.address.commons.util.AppUtil.checkArgument;
+
 import java.util.Objects;
 
 /**
@@ -17,7 +20,7 @@ public class NextOfKin {
 
     // Regex: letters + allowed punctuation + spaces
     // ^ start, $ end
-    public static final String VALIDATION_REGEX = "[A-Za-z ,.'-]+";
+    public static final String VALIDATION_REGEX = "[A-Za-z][A-Za-z ,.'-]*";
 
     private final String fullName;
 
@@ -29,17 +32,9 @@ public class NextOfKin {
     public NextOfKin(String name) {
         Objects.requireNonNull(name);
 
-        String trimmed = name.trim();
-
-        if (trimmed.isEmpty()) {
-            throw new IllegalArgumentException(MESSAGE_EMPTY);
-        }
-
-        if (!isValidNextOfKin(trimmed)) {
-            throw new IllegalArgumentException(MESSAGE_CONSTRAINTS);
-        }
-
-        this.fullName = trimmed;
+        requireNonNull(name);
+        checkArgument(isValidNextOfKin(name), MESSAGE_CONSTRAINTS);
+        fullName = name;
     }
 
     /**

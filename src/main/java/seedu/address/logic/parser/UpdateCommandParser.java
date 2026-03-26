@@ -9,6 +9,7 @@ import static seedu.address.logic.parser.CliSyntax.PREFIX_EMAIL;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_IC;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_NEXT_OF_KIN;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_NEXT_OF_KIN_PHONE;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_NEXT_OF_KIN_RELATIONSHIP;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_NOTES;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_PATIENT_NAME;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_PATIENT_PHONE;
@@ -50,6 +51,7 @@ public class UpdateCommandParser implements Parser<UpdateCommand> {
                         PREFIX_NEXT_OF_KIN_PHONE,
                         PREFIX_DOCTOR,
                         PREFIX_NEXT_OF_KIN,
+                        PREFIX_NEXT_OF_KIN_RELATIONSHIP,
                         PREFIX_NOTES,
                         PREFIX_APPEND_NOTES // NEW: Added to tokenizer
                 );
@@ -71,6 +73,7 @@ public class UpdateCommandParser implements Parser<UpdateCommand> {
                 PREFIX_NEXT_OF_KIN_PHONE,
                 PREFIX_DOCTOR,
                 PREFIX_NEXT_OF_KIN,
+                PREFIX_NEXT_OF_KIN_RELATIONSHIP,
                 PREFIX_NOTES,
                 PREFIX_APPEND_NOTES);
 
@@ -102,6 +105,7 @@ public class UpdateCommandParser implements Parser<UpdateCommand> {
         if (argMultimap.getValue(PREFIX_IC).isPresent()) {
             updatePersonDescriptor.setIc(ParserUtil.parseIc(argMultimap.getValue(PREFIX_IC).get()));
         }
+
         if (argMultimap.getValue(PREFIX_NEXT_OF_KIN_PHONE).isPresent()) {
             updatePersonDescriptor.setNextOfKinPhone(ParserUtil
                     .parseNextOfKinPhone(argMultimap.getValue(PREFIX_NEXT_OF_KIN_PHONE).get()));
@@ -114,6 +118,11 @@ public class UpdateCommandParser implements Parser<UpdateCommand> {
         if (argMultimap.getValue(PREFIX_NEXT_OF_KIN).isPresent()) {
             updatePersonDescriptor.setNextOfKin(ParserUtil.parseNextOfKin(argMultimap.getValue(PREFIX_NEXT_OF_KIN)
                     .get()));
+        }
+
+        if (argMultimap.getValue(PREFIX_NEXT_OF_KIN_RELATIONSHIP).isPresent()) {
+            updatePersonDescriptor.setNextOfKinRelationship(ParserUtil
+                    .parseNextOfKinRelationship(argMultimap.getValue(PREFIX_NEXT_OF_KIN_RELATIONSHIP).get()));
         }
 
         if (argMultimap.getValue(PREFIX_NOTES).isPresent()) {
