@@ -37,6 +37,24 @@ public class Notes {
         return value;
     }
 
+    /**
+     * Appends the given Notes to this current Notes.
+     * Returns a new Notes object containing the combined text.
+     */
+    public Notes append(Notes additionalNotes) {
+        if (additionalNotes.value.trim().isEmpty()) {
+            return this;
+        }
+
+        String existingText = this.value;
+
+        if (existingText.trim().isEmpty()) {
+            return additionalNotes;
+        }
+
+        return new Notes(existingText + "\n" + additionalNotes.value);
+    }
+
     @Override
     public String toString() {
         return value;

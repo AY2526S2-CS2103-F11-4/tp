@@ -2,6 +2,7 @@ package seedu.address.logic.commands;
 
 import static java.util.Objects.requireNonNull;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_ADDRESS;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_APPEND_NOTES;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_DOCTOR;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_EMAIL;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_IC;
@@ -61,7 +62,7 @@ public class UpdateCommand extends Command {
             + "[" + PREFIX_NEXT_OF_KIN_PHONE + "N-O-K PHONE] "
             + "[" + PREFIX_DOCTOR + "]"
             + "[" + PREFIX_SYMPTOM + "SYMPTOM]"
-            + "[" + PREFIX_NOTES + "NOTES]...\n"
+            + "[" + PREFIX_NOTES + "NOTES] [" + PREFIX_APPEND_NOTES + "APPEND_NOTES]...\n"
             + "Example: " + COMMAND_WORD + " 1 "
             + PREFIX_PATIENT_PHONE + "91234567 "
             + PREFIX_EMAIL + "johndoe@example.com";
@@ -110,7 +111,8 @@ public class UpdateCommand extends Command {
      * Creates and returns a {@code Person} with the details of {@code personToEdit}
      * edited with {@code editPersonDescriptor}.
      */
-    private static Person createUpdatedPerson(Person personToUpdate, UpdatePersonDescriptor updatePersonDescriptor) {
+    private static Person createUpdatedPerson(Person personToUpdate, UpdatePersonDescriptor updatePersonDescriptor)
+            throws CommandException {
         assert personToUpdate != null;
 
         Name updatedName = updatePersonDescriptor.getName().orElse(personToUpdate.getName());
@@ -125,7 +127,22 @@ public class UpdateCommand extends Command {
                 .orElse(personToUpdate.getNextOfKinPhone());
         DoctorName updatedDoctorName = updatePersonDescriptor.getDoctorName().orElse(personToUpdate.getDoctorName());
         NextOfKin updatedNextOfKin = updatePersonDescriptor.getNextOfKin().orElse(personToUpdate.getNextOfKin());
-        Notes updatedNotes = updatePersonDescriptor.getNotes().orElse(personToUpdate.getNotes());
+
+        // NEW: Abstracted Append Logic
+        Notes updatedNotes = personToUpdate.getNotes();
+
+        if (updatePersonDescriptor.getNotes().isPresent()) {
+            updatedNotes = updatePersonDescriptor.getNotes().get();
+        } else if (updatePersonDescriptor.getNotesToAppend().isPresent()) {
+            try {
+                // The combination logic is now entirely handled by the Notes class
+                updatedNotes = updatedNotes.append(updatePersonDescriptor.getNotesToAppend().get());
+            } catch (IllegalArgumentException e) {
+                // Catches the error if the appended notes exceed character limits
+                throw new CommandException("Appending this text exceeds the note character constraints. "
+                        + Notes.MESSAGE_CONSTRAINTS);
+            }
+        }
 
         return new Person(updatedName,
                 updatedPhone,
@@ -146,7 +163,6 @@ public class UpdateCommand extends Command {
             return true;
         }
 
-        // instanceof handles nulls
         if (!(other instanceof UpdateCommand otherUpdateCommand)) {
             return false;
         }
@@ -179,6 +195,7 @@ public class UpdateCommand extends Command {
         private DoctorName doctorName;
         private NextOfKin nextOfKin;
         private Notes notes;
+        private Notes notesToAppend; // CHANGED to Notes
 
         public UpdatePersonDescriptor() {}
 
@@ -198,6 +215,7 @@ public class UpdateCommand extends Command {
             setDoctorName(toCopy.doctorName);
             setNextOfKin(toCopy.nextOfKin);
             setNotes(toCopy.notes);
+            setNotesToAppend(toCopy.notesToAppend); // Updated
         }
 
         /**
@@ -205,7 +223,7 @@ public class UpdateCommand extends Command {
          */
         public boolean isAnyFieldEdited() {
             return CollectionUtil.isAnyNonNull(name, phone, email, address,
-                    symptoms, urgencyLevel, ic, nextOfKinPhone, doctorName, nextOfKin, notes);
+                    symptoms, urgencyLevel, ic, nextOfKinPhone, doctorName, nextOfKin, notes, notesToAppend);
         }
 
         public void setName(Name name) {
@@ -255,6 +273,7 @@ public class UpdateCommand extends Command {
         public Optional<DoctorName> getDoctorName() {
             return Optional.ofNullable(doctorName);
         }
+
         public void setNextOfKin(NextOfKin nextOfKin) {
             this.nextOfKin = nextOfKin;
         }
@@ -271,19 +290,19 @@ public class UpdateCommand extends Command {
             return Optional.ofNullable(notes);
         }
 
-        /**
-         * Sets {@code symptoms} to this object's {@code symptoms}.
-         * A defensive copy of {@code symptoms} is used internally.
-         */
+        // UPDATED: Now accepts and returns Notes
+        public void setNotesToAppend(Notes notesToAppend) {
+            this.notesToAppend = notesToAppend;
+        }
+
+        public Optional<Notes> getNotesToAppend() {
+            return Optional.ofNullable(notesToAppend);
+        }
+
         public void setSymptoms(Set<Symptom> symptoms) {
             this.symptoms = (symptoms != null) ? new HashSet<>(symptoms) : null;
         }
 
-        /**
-         * Returns an unmodifiable symptom set, which throws {@code UnsupportedOperationException}
-         * if modification is attempted.
-         * Returns {@code Optional#empty()} if {@code symptoms} is null.
-         */
         public Optional<Set<Symptom>> getSymptoms() {
             return (symptoms != null) ? Optional.of(Collections.unmodifiableSet(symptoms)) : Optional.empty();
         }
@@ -310,7 +329,6 @@ public class UpdateCommand extends Command {
                 return true;
             }
 
-            // instanceof handles nulls
             if (!(other instanceof UpdatePersonDescriptor otherUpdatePersonDescriptor)) {
                 return false;
             }
@@ -325,7 +343,8 @@ public class UpdateCommand extends Command {
                     && Objects.equals(nextOfKinPhone, otherUpdatePersonDescriptor.nextOfKinPhone)
                     && Objects.equals(doctorName, otherUpdatePersonDescriptor.doctorName)
                     && Objects.equals(nextOfKin, otherUpdatePersonDescriptor.nextOfKin)
-                    && Objects.equals(notes, otherUpdatePersonDescriptor.notes);
+                    && Objects.equals(notes, otherUpdatePersonDescriptor.notes)
+                    && Objects.equals(notesToAppend, otherUpdatePersonDescriptor.notesToAppend);
         }
 
         @Override
@@ -342,6 +361,7 @@ public class UpdateCommand extends Command {
                     .add("doctorName", doctorName)
                     .add("nextOfKin", nextOfKin)
                     .add("notes", notes)
+                    .add("notesToAppend", notesToAppend)
                     .toString();
         }
     }
