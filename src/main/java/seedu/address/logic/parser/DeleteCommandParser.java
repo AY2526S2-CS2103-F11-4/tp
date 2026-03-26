@@ -16,9 +16,11 @@ import static seedu.address.logic.parser.CliSyntax.PREFIX_SYMPTOM;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_URGENCY;
 
 import java.util.Set;
+import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import seedu.address.commons.core.LogsCenter;
 import seedu.address.commons.core.index.Index;
 import seedu.address.logic.commands.DeleteCommand;
 import seedu.address.logic.commands.MultipleDeleteCommand;
@@ -37,6 +39,8 @@ public class DeleteCommandParser implements Parser<DeleteCommand> {
             Pattern.compile("(?<indices>^[0-9]+(,[0-9]+)*$)");
     private static final Pattern RANGE_ARGUMENT_FORMAT =
             Pattern.compile("(?<start>^[0-9]+)-(?<end>[0-9]+$)");
+
+    private final Logger logger = LogsCenter.getLogger(DeleteCommandParser.class);
 
     /**
      * Parses the given {@code String} of arguments in the context of the DeleteCommand
@@ -90,6 +94,8 @@ public class DeleteCommandParser implements Parser<DeleteCommand> {
         }
 
         Set<Prefix> prefixes = argMultimap.getPrefixes();
+
+        logger.fine("Indices: " + indicesString + "; Prefixes: " + prefixes);
 
         if (indicesString.contains(MULTIPLE_INDICES_DELIMITER)) {
             return parseMultipleIndices(indicesString, prefixes);
