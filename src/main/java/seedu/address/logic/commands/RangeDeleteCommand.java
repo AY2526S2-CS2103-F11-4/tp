@@ -23,6 +23,8 @@ public class RangeDeleteCommand extends DeleteCommand {
 
     private final Index startIndex;
     private final Index endIndex;
+    private Person[] deletedPersons;
+    private boolean wasExecuted = false;
 
     /**
      * Creates a RangeDeleteCommand to delete the specified range of people.
@@ -33,6 +35,11 @@ public class RangeDeleteCommand extends DeleteCommand {
     public RangeDeleteCommand(Index startIndex, Index endIndex) {
         this.startIndex = startIndex;
         this.endIndex = endIndex;
+    }
+
+    @Override
+    public boolean isUndoable() {
+        return true;
     }
 
     @Override
@@ -60,12 +67,25 @@ public class RangeDeleteCommand extends DeleteCommand {
             personsToDelete[i] = personToDelete;
         }
 
+        deletedPersons = personsToDelete;
+
         StringBuilder deletedPersonsString = new StringBuilder();
         for (Person person : personsToDelete) {
             model.deletePerson(person);
             deletedPersonsString.append("\n" + Messages.format(person));
         }
+        wasExecuted = true;
         return new CommandResult(String.format(MESSAGE_DELETE_PERSON_SUCCESS, deletedPersonsString));
+    }
+
+    @Override
+    public void undo(Model model) throws CommandException {
+        requireNonNull(model);
+        if (wasExecuted && deletedPersons != null) {
+            for (Person person : deletedPersons) {
+                model.addPerson(person);
+            }
+        }
     }
 
     @Override

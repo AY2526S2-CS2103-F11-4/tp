@@ -22,9 +22,16 @@ public class SingleDeleteCommand extends DeleteCommand {
             + "Example: " + COMMAND_WORD + " 1";
 
     private final Index targetIndex;
+    private Person deletedPerson;
+    private boolean wasExecuted = false;
 
     public SingleDeleteCommand(Index targetIndex) {
         this.targetIndex = targetIndex;
+    }
+
+    @Override
+    public boolean isUndoable() {
+        return true;
     }
 
     @Override
@@ -42,8 +49,18 @@ public class SingleDeleteCommand extends DeleteCommand {
         }
 
         Person personToDelete = lastShownList.get(targetIndex.getZeroBased());
+        deletedPerson = personToDelete;
         model.deletePerson(personToDelete);
+        wasExecuted = true;
         return new CommandResult(String.format(MESSAGE_DELETE_PERSON_SUCCESS, Messages.format(personToDelete)));
+    }
+
+    @Override
+    public void undo(Model model) throws CommandException {
+        requireNonNull(model);
+        if (wasExecuted && deletedPerson != null) {
+            model.addPerson(deletedPerson);
+        }
     }
 
     @Override
