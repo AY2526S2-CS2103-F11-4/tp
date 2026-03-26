@@ -97,9 +97,8 @@ public class UpdatePersonDescriptorTest {
                 + "nextOfKinPhone=" + updatePersonDescriptor.getNextOfKinPhone().orElse(null) + ", "
                 + "doctorName=" + updatePersonDescriptor.getDoctorName().orElse(null) + ", "
                 + "nextOfKin=" + updatePersonDescriptor.getNextOfKin().orElse(null) + ", "
-                + "nextOfKinRelationship=" + updatePersonDescriptor.getNextOfKin().orElse(null) + ", "
-                + "notes=" + updatePersonDescriptor.getNotes().orElse(null) 
-                      + updatePersonDescriptor.getNextOfKinRelationship().orElse(null) ", "
+                + "nextOfKinRelationship=" + updatePersonDescriptor.getNextOfKinRelationship().orElse(null) + ", "
+                + "notes=" + updatePersonDescriptor.getNotes().orElse(null) + ", "
                 + "notesToAppend=" + updatePersonDescriptor.getNotesToAppend().orElse(null)
                 + "}";
         assertEquals(expected, updatePersonDescriptor.toString());

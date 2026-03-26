@@ -239,7 +239,7 @@ public class UpdateCommand extends Command {
 
         public boolean isAnyFieldEdited() {
             return CollectionUtil.isAnyNonNull(name, phone, email, address,
-                    symptoms, urgencyLevel, ic, nextOfKinPhone, doctorName, nextOfKin, 
+                    symptoms, urgencyLevel, ic, nextOfKinPhone, doctorName, nextOfKin,
                     nextOfKinRelationship, notes, notesToAppend);
         }
 
