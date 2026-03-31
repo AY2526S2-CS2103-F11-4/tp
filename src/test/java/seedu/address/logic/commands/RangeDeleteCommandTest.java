@@ -14,6 +14,8 @@ import static seedu.address.testutil.TypicalIndexes.INDEX_SECOND_PERSON;
 import static seedu.address.testutil.TypicalIndexes.INDEX_THIRD_PERSON;
 import static seedu.address.testutil.TypicalPersons.getTypicalAddressBook;
 
+import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import org.junit.jupiter.api.Test;
@@ -158,7 +160,7 @@ public class RangeDeleteCommandTest {
                 "Precondition failed: target person should have notes.");
 
         DeleteCommand deleteCommand =
-                new RangeDeleteCommand(INDEX_FIRST_PERSON, INDEX_THIRD_PERSON, Set.of(PREFIX_NOTES));
+                new RangeDeleteCommand(INDEX_FIRST_PERSON, INDEX_THIRD_PERSON, Map.of(PREFIX_NOTES, List.of()));
 
         Person firstExpectedPerson = new PersonBuilder(firstTargetPerson).withNotes("").build();
         Person secondExpectedPerson = new PersonBuilder(secondTargetPerson).withNotes("").build();
@@ -182,7 +184,7 @@ public class RangeDeleteCommandTest {
                 "Precondition failed: target person should not have symptoms.");
 
         DeleteCommand deleteCommand =
-                new RangeDeleteCommand(INDEX_FIRST_PERSON, INDEX_THIRD_PERSON, Set.of(PREFIX_SYMPTOM));
+                new RangeDeleteCommand(INDEX_FIRST_PERSON, INDEX_THIRD_PERSON, Map.of(PREFIX_SYMPTOM, List.of()));
 
         assertCommandFailure(deleteCommand, model, DeleteCommand.MESSAGE_VALUE_NOT_FOUND);
     }
@@ -202,7 +204,7 @@ public class RangeDeleteCommandTest {
                 "Precondition failed: target person should have notes.");
 
         DeleteCommand deleteCommand =
-                new RangeDeleteCommand(INDEX_FIRST_PERSON, INDEX_THIRD_PERSON, Set.of(PREFIX_NOTES));
+                new RangeDeleteCommand(INDEX_FIRST_PERSON, INDEX_THIRD_PERSON, Map.of(PREFIX_NOTES, List.of()));
 
         Person firstExpectedPerson = new PersonBuilder(firstTargetPerson).withNotes("").build();
         Person secondExpectedPerson = new PersonBuilder(secondTargetPerson).withNotes("").build();
@@ -229,7 +231,7 @@ public class RangeDeleteCommandTest {
                 "Precondition failed: target person should not have symptoms.");
 
         DeleteCommand deleteCommand =
-                new RangeDeleteCommand(INDEX_FIRST_PERSON, INDEX_THIRD_PERSON, Set.of(PREFIX_SYMPTOM));
+                new RangeDeleteCommand(INDEX_FIRST_PERSON, INDEX_THIRD_PERSON, Map.of(PREFIX_SYMPTOM, List.of()));
 
         assertCommandFailure(deleteCommand, model, DeleteCommand.MESSAGE_VALUE_NOT_FOUND);
     }
@@ -267,18 +269,18 @@ public class RangeDeleteCommandTest {
         assertFalse(deleteFirstCommand.equals(deleteSecondCommand));
 
         // different target indices and different command type -> returns false
-        DeleteCommand deleteMultipleCommand =
-                new MultipleDeleteCommand(new Index[]{ INDEX_FIRST_PERSON, INDEX_THIRD_PERSON });
+        DeleteCommand deleteMultipleCommand = new MultipleDeleteCommand(INDEX_FIRST_PERSON, INDEX_THIRD_PERSON);
         assertFalse(deleteFirstCommand.equals(deleteMultipleCommand));
     }
 
     @Test
     public void toStringMethod() {
         Index targetIndex = Index.fromOneBased(1);
-        DeleteCommand deleteCommand = new RangeDeleteCommand(targetIndex, targetIndex, Set.of(PREFIX_NOTES));
+        DeleteCommand deleteCommand =
+                new RangeDeleteCommand(targetIndex, targetIndex, Map.of(PREFIX_NOTES, List.of()));
         String expected = RangeDeleteCommand.class.getCanonicalName()
                 + "{targetIndices=" + Set.of(targetIndex)
-                + ", prefixes=" + Set.of(PREFIX_NOTES) + "}";
+                + ", prefixes=" + Map.of(PREFIX_NOTES, List.of()) + "}";
         assertEquals(expected, deleteCommand.toString());
     }
 

@@ -12,6 +12,8 @@ import static seedu.address.testutil.TypicalIndexes.INDEX_FIRST_PERSON;
 import static seedu.address.testutil.TypicalIndexes.INDEX_SECOND_PERSON;
 import static seedu.address.testutil.TypicalPersons.getTypicalAddressBook;
 
+import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import org.junit.jupiter.api.Test;
@@ -91,7 +93,8 @@ public class SingleDeleteCommandTest {
         Person targetPerson = model.getFilteredPersonList().get(INDEX_FIRST_PERSON.getZeroBased());
         assertFalse(targetPerson.getSymptoms().isEmpty() || targetPerson.getNotes().getValue().isEmpty(),
                 "Precondition failed: target person should have symptoms and notes.");
-        DeleteCommand deleteCommand = new SingleDeleteCommand(INDEX_FIRST_PERSON, Set.of(PREFIX_SYMPTOM, PREFIX_NOTES));
+        DeleteCommand deleteCommand = new SingleDeleteCommand(INDEX_FIRST_PERSON,
+                Map.of(PREFIX_SYMPTOM, List.of(), PREFIX_NOTES, List.of()));
 
         Person expectedPerson = new PersonBuilder(targetPerson).withSymptoms().withNotes("").build();
         String expectedMessage = String.format(
@@ -109,8 +112,8 @@ public class SingleDeleteCommandTest {
         assertTrue(targetPerson.getSymptoms().isEmpty() && !targetPerson.getNotes().getValue().isEmpty(),
                 "Precondition failed: target person should have notes but no symptoms.");
 
-        DeleteCommand deleteCommand =
-                new SingleDeleteCommand(INDEX_SECOND_PERSON, Set.of(PREFIX_SYMPTOM, PREFIX_NOTES));
+        DeleteCommand deleteCommand = new SingleDeleteCommand(INDEX_SECOND_PERSON,
+                Map.of(PREFIX_SYMPTOM, List.of(), PREFIX_NOTES, List.of()));
 
         assertCommandFailure(deleteCommand, model, DeleteCommand.MESSAGE_VALUE_NOT_FOUND);
     }
@@ -122,7 +125,7 @@ public class SingleDeleteCommandTest {
         Person targetPerson = model.getFilteredPersonList().get(INDEX_FIRST_PERSON.getZeroBased());
         assertFalse(targetPerson.getSymptoms().isEmpty(),
                 "Precondition failed: target person should have symptoms.");
-        DeleteCommand deleteCommand = new SingleDeleteCommand(INDEX_FIRST_PERSON, Set.of(PREFIX_SYMPTOM));
+        DeleteCommand deleteCommand = new SingleDeleteCommand(INDEX_FIRST_PERSON, Map.of(PREFIX_SYMPTOM, List.of()));
 
         Person expectedPerson = new PersonBuilder(targetPerson).withSymptoms().build();
         String expectedMessage = String.format(
@@ -148,7 +151,7 @@ public class SingleDeleteCommandTest {
         assertTrue(targetPerson.getNotes().getValue().isEmpty(),
                 "Precondition failed: target person should not have notes.");
 
-        DeleteCommand deleteCommand = new SingleDeleteCommand(INDEX_FIRST_PERSON, Set.of(PREFIX_NOTES));
+        DeleteCommand deleteCommand = new SingleDeleteCommand(INDEX_FIRST_PERSON, Map.of(PREFIX_NOTES, List.of()));
 
         assertCommandFailure(deleteCommand, model, DeleteCommand.MESSAGE_VALUE_NOT_FOUND);
     }
@@ -165,8 +168,8 @@ public class SingleDeleteCommandTest {
     public void equals() {
         DeleteCommand deleteFirstCommand = new SingleDeleteCommand(INDEX_FIRST_PERSON);
         DeleteCommand deleteSecondCommand = new SingleDeleteCommand(INDEX_SECOND_PERSON);
-        DeleteCommand deleteFirstCommandWithPrefixes =
-                new SingleDeleteCommand(INDEX_FIRST_PERSON, Set.of(PREFIX_SYMPTOM, PREFIX_NOTES));
+        DeleteCommand deleteFirstCommandWithPrefixes = new SingleDeleteCommand(INDEX_FIRST_PERSON,
+                Map.of(PREFIX_SYMPTOM, List.of(), PREFIX_NOTES, List.of()));
 
         // same object -> returns true
         assertTrue(deleteFirstCommand.equals(deleteFirstCommand));
@@ -189,8 +192,8 @@ public class SingleDeleteCommandTest {
         assertTrue(deleteFirstCommand.equals(deleteRangeCommand));
 
         // same target index and same prefixes -> returns true
-        DeleteCommand deleteFirstCommandWithSamePrefixes =
-                new SingleDeleteCommand(INDEX_FIRST_PERSON, Set.of(PREFIX_SYMPTOM, PREFIX_NOTES));
+        DeleteCommand deleteFirstCommandWithSamePrefixes = new SingleDeleteCommand(INDEX_FIRST_PERSON,
+                Map.of(PREFIX_SYMPTOM, List.of(), PREFIX_NOTES, List.of()));
         assertTrue(deleteFirstCommandWithPrefixes.equals(deleteFirstCommandWithSamePrefixes));
 
         // same target index but different prefixes -> returns false
@@ -198,17 +201,19 @@ public class SingleDeleteCommandTest {
 
         // same target indices and same prefixes but different command type -> returns true
         DeleteCommand deleteMultipleCommandWithSamePrefixes =
-                new MultipleDeleteCommand(new Index[]{ INDEX_FIRST_PERSON }, Set.of(PREFIX_SYMPTOM, PREFIX_NOTES));
+                new MultipleDeleteCommand(new Index[]{ INDEX_FIRST_PERSON },
+                        Map.of(PREFIX_SYMPTOM, List.of(), PREFIX_NOTES, List.of()));
         assertTrue(deleteFirstCommandWithSamePrefixes.equals(deleteMultipleCommandWithSamePrefixes));
     }
 
     @Test
     public void toStringMethod() {
         Index targetIndex = Index.fromOneBased(1);
-        DeleteCommand deleteCommand = new SingleDeleteCommand(targetIndex, Set.of(PREFIX_SYMPTOM, PREFIX_NOTES));
+        DeleteCommand deleteCommand = new SingleDeleteCommand(targetIndex,
+                Map.of(PREFIX_SYMPTOM, List.of(), PREFIX_NOTES, List.of()));
         String expected = SingleDeleteCommand.class.getCanonicalName()
                 + "{targetIndices=" + Set.of(targetIndex)
-                + ", prefixes=" + Set.of(PREFIX_SYMPTOM, PREFIX_NOTES) + "}";
+                + ", prefixes=" + Map.of(PREFIX_SYMPTOM, List.of(), PREFIX_NOTES, List.of()) + "}";
         assertEquals(expected, deleteCommand.toString());
     }
 

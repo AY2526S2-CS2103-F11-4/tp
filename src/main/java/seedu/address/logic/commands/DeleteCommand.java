@@ -80,6 +80,7 @@ public abstract class DeleteCommand extends Command {
         }
 
         List<Symptom> symptomsToDelete = prefixesMap.getOrDefault(PREFIX_SYMPTOM, List.of()).stream()
+                .filter(s -> !s.isEmpty())
                 .map(Symptom::new)
                 .toList();
         Set<Symptom> updatedSymptoms = new HashSet<>(personToDelete.getSymptoms()); // instantiate with all symptoms

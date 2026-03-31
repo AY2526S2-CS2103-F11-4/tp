@@ -13,6 +13,8 @@ import static seedu.address.testutil.TypicalIndexes.INDEX_SECOND_PERSON;
 import static seedu.address.testutil.TypicalIndexes.INDEX_THIRD_PERSON;
 import static seedu.address.testutil.TypicalPersons.getTypicalAddressBook;
 
+import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import org.junit.jupiter.api.Test;
@@ -37,7 +39,7 @@ public class MultipleDeleteCommandTest {
     public void execute_validIndicesUnfilteredList_success() {
         Person firstPersonToDelete = model.getFilteredPersonList().get(INDEX_FIRST_PERSON.getZeroBased());
         Person secondPersonToDelete = model.getFilteredPersonList().get(INDEX_SECOND_PERSON.getZeroBased());
-        DeleteCommand deleteCommand = new MultipleDeleteCommand(new Index[]{ INDEX_FIRST_PERSON, INDEX_SECOND_PERSON });
+        DeleteCommand deleteCommand = new MultipleDeleteCommand(INDEX_FIRST_PERSON, INDEX_SECOND_PERSON);
 
         String expectedMessage = String.format(DeleteCommand.MESSAGE_DELETE_PERSON_SUCCESS,
                 "\n" + Messages.format(firstPersonToDelete) + "\n" + Messages.format(secondPersonToDelete));
@@ -52,7 +54,7 @@ public class MultipleDeleteCommandTest {
     @Test
     public void execute_invalidIndexUnfilteredList_throwsCommandException() {
         Index outOfBoundIndex = Index.fromOneBased(model.getFilteredPersonList().size() + 1);
-        DeleteCommand deleteCommand = new MultipleDeleteCommand(new Index[]{ INDEX_FIRST_PERSON, outOfBoundIndex });
+        DeleteCommand deleteCommand = new MultipleDeleteCommand(INDEX_FIRST_PERSON, outOfBoundIndex);
 
         Index lastIndex = Index.fromOneBased(model.getFilteredPersonList().size());
         assertCommandFailure(deleteCommand, model, Messages.getErrorMessageForInvalidIndices(lastIndex));
@@ -64,7 +66,7 @@ public class MultipleDeleteCommandTest {
 
         Person firstPersonToDelete = model.getFilteredPersonList().get(INDEX_FIRST_PERSON.getZeroBased());
         Person secondPersonToDelete = model.getFilteredPersonList().get(INDEX_SECOND_PERSON.getZeroBased());
-        DeleteCommand deleteCommand = new MultipleDeleteCommand(new Index[]{ INDEX_FIRST_PERSON, INDEX_SECOND_PERSON });
+        DeleteCommand deleteCommand = new MultipleDeleteCommand(INDEX_FIRST_PERSON, INDEX_SECOND_PERSON);
 
         String expectedMessage = String.format(DeleteCommand.MESSAGE_DELETE_PERSON_SUCCESS,
                 "\n" + Messages.format(firstPersonToDelete) + "\n" + Messages.format(secondPersonToDelete));
@@ -85,7 +87,7 @@ public class MultipleDeleteCommandTest {
         // ensures that outOfBoundIndex is still in bounds of address book list
         assertTrue(outOfBoundIndex.getZeroBased() < model.getAddressBook().getPersonList().size());
 
-        DeleteCommand deleteCommand = new MultipleDeleteCommand(new Index[]{ INDEX_FIRST_PERSON, outOfBoundIndex });
+        DeleteCommand deleteCommand = new MultipleDeleteCommand(INDEX_FIRST_PERSON, outOfBoundIndex);
 
         Index lastIndex = Index.fromOneBased(model.getFilteredPersonList().size());
         assertCommandFailure(deleteCommand, model, Messages.getErrorMessageForInvalidIndices(lastIndex));
@@ -93,7 +95,7 @@ public class MultipleDeleteCommandTest {
 
     @Test
     public void execute_duplicateIndicesUnfilteredList_throwsCommandException() {
-        DeleteCommand deleteCommand = new MultipleDeleteCommand(new Index[]{ INDEX_FIRST_PERSON, INDEX_FIRST_PERSON });
+        DeleteCommand deleteCommand = new MultipleDeleteCommand(INDEX_FIRST_PERSON, INDEX_FIRST_PERSON);
 
         assertCommandFailure(deleteCommand, model,
                 Messages.getErrorMessageForDuplicateIndices(Set.of(INDEX_FIRST_PERSON)));
@@ -103,7 +105,7 @@ public class MultipleDeleteCommandTest {
     public void execute_duplicateIndicesFilteredList_throwsCommandException() {
         showPersonsInIndexRange(model, INDEX_FIRST_PERSON, INDEX_SECOND_PERSON);
 
-        DeleteCommand deleteCommand = new MultipleDeleteCommand(new Index[]{ INDEX_FIRST_PERSON, INDEX_FIRST_PERSON });
+        DeleteCommand deleteCommand = new MultipleDeleteCommand(INDEX_FIRST_PERSON, INDEX_FIRST_PERSON);
 
         assertCommandFailure(deleteCommand, model,
                 Messages.getErrorMessageForDuplicateIndices(Set.of(INDEX_FIRST_PERSON)));
@@ -119,7 +121,7 @@ public class MultipleDeleteCommandTest {
                 "Precondition failed: target person should have symptoms.");
 
         DeleteCommand deleteCommand = new MultipleDeleteCommand(
-                new Index[]{ INDEX_FIRST_PERSON, INDEX_THIRD_PERSON }, Set.of(PREFIX_SYMPTOM));
+                new Index[]{ INDEX_FIRST_PERSON, INDEX_THIRD_PERSON }, Map.of(PREFIX_SYMPTOM, List.of()));
 
         Person firstExpectedPerson = new PersonBuilder(firstTargetPerson).withSymptoms().build();
         Person secondExpectedPerson = new PersonBuilder(secondTargetPerson).withSymptoms().build();
@@ -140,7 +142,7 @@ public class MultipleDeleteCommandTest {
                 "Precondition failed: target person should not have symptoms.");
 
         DeleteCommand deleteCommand = new MultipleDeleteCommand(
-                new Index[]{ INDEX_FIRST_PERSON, INDEX_SECOND_PERSON }, Set.of(PREFIX_SYMPTOM));
+                new Index[]{ INDEX_FIRST_PERSON, INDEX_SECOND_PERSON }, Map.of(PREFIX_SYMPTOM, List.of()));
 
         assertCommandFailure(deleteCommand, model, DeleteCommand.MESSAGE_VALUE_NOT_FOUND);
     }
@@ -157,7 +159,7 @@ public class MultipleDeleteCommandTest {
                 "Precondition failed: target person should have notes.");
 
         DeleteCommand deleteCommand = new MultipleDeleteCommand(
-                new Index[]{ INDEX_FIRST_PERSON, INDEX_SECOND_PERSON }, Set.of(PREFIX_NOTES));
+                new Index[]{ INDEX_FIRST_PERSON, INDEX_SECOND_PERSON }, Map.of(PREFIX_NOTES, List.of()));
 
         Person firstExpectedPerson = new PersonBuilder(firstTargetPerson).withNotes("").build();
         Person secondExpectedPerson = new PersonBuilder(secondTargetPerson).withNotes("").build();
@@ -181,7 +183,7 @@ public class MultipleDeleteCommandTest {
                 "Precondition failed: target person should not have symptoms.");
 
         DeleteCommand deleteCommand = new MultipleDeleteCommand(
-                new Index[]{ INDEX_FIRST_PERSON, INDEX_SECOND_PERSON }, Set.of(PREFIX_SYMPTOM));
+                new Index[]{ INDEX_FIRST_PERSON, INDEX_SECOND_PERSON }, Map.of(PREFIX_SYMPTOM, List.of()));
 
         assertCommandFailure(deleteCommand, model, DeleteCommand.MESSAGE_VALUE_NOT_FOUND);
     }
@@ -190,23 +192,20 @@ public class MultipleDeleteCommandTest {
     public void execute_noPersons_throwsCommandException() {
         showNoPerson(model);
 
-        DeleteCommand deleteCommand = new MultipleDeleteCommand(new Index[]{ INDEX_FIRST_PERSON });
+        DeleteCommand deleteCommand = new MultipleDeleteCommand(INDEX_FIRST_PERSON);
         assertCommandFailure(deleteCommand, model, Messages.getErrorMessageForNoPersons(DeleteCommand.COMMAND_WORD));
     }
 
     @Test
     public void equals() {
-        DeleteCommand deleteFirstCommand =
-                new MultipleDeleteCommand(new Index[]{ INDEX_FIRST_PERSON, INDEX_SECOND_PERSON });
-        DeleteCommand deleteSecondCommand =
-                new MultipleDeleteCommand(new Index[]{ INDEX_SECOND_PERSON, INDEX_THIRD_PERSON });
+        DeleteCommand deleteFirstCommand = new MultipleDeleteCommand(INDEX_FIRST_PERSON, INDEX_SECOND_PERSON);
+        DeleteCommand deleteSecondCommand = new MultipleDeleteCommand(INDEX_SECOND_PERSON, INDEX_THIRD_PERSON);
 
         // same object -> returns true
         assertTrue(deleteFirstCommand.equals(deleteFirstCommand));
 
         // same values -> returns true
-        DeleteCommand deleteFirstCommandCopy =
-                new MultipleDeleteCommand(new Index[]{ INDEX_FIRST_PERSON, INDEX_SECOND_PERSON });
+        DeleteCommand deleteFirstCommandCopy = new MultipleDeleteCommand(INDEX_FIRST_PERSON, INDEX_SECOND_PERSON);
         assertTrue(deleteFirstCommand.equals(deleteFirstCommandCopy));
 
         // different types -> returns false
@@ -226,10 +225,11 @@ public class MultipleDeleteCommandTest {
     @Test
     public void toStringMethod() {
         Index targetIndex = Index.fromOneBased(1);
-        DeleteCommand deleteCommand = new MultipleDeleteCommand(new Index[]{ targetIndex }, Set.of(PREFIX_SYMPTOM));
+        DeleteCommand deleteCommand =
+                new MultipleDeleteCommand(new Index[]{ targetIndex }, Map.of(PREFIX_SYMPTOM, List.of()));
         String expected = MultipleDeleteCommand.class.getCanonicalName()
                 + "{targetIndices=" + Set.of(targetIndex)
-                + ", prefixes=" + Set.of(PREFIX_SYMPTOM) + "}";
+                + ", prefixes=" + Map.of(PREFIX_SYMPTOM, List.of()) + "}";
         assertEquals(expected, deleteCommand.toString());
     }
 
