@@ -16,7 +16,6 @@ import static seedu.address.testutil.TypicalPersons.getTypicalAddressBook;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import org.junit.jupiter.api.Test;
 
@@ -246,17 +245,16 @@ public class RangeDeleteCommandTest {
 
     @Test
     public void equals() {
-        DeleteCommand deleteFirstCommand =
-                new RangeDeleteCommand(INDEX_FIRST_PERSON, INDEX_SECOND_PERSON);
-        DeleteCommand deleteSecondCommand =
-                new RangeDeleteCommand(INDEX_SECOND_PERSON, INDEX_THIRD_PERSON);
+        DeleteCommand deleteFirstCommand = new RangeDeleteCommand(INDEX_FIRST_PERSON, INDEX_SECOND_PERSON);
+        DeleteCommand deleteSecondCommand = new RangeDeleteCommand(INDEX_SECOND_PERSON, INDEX_SECOND_PERSON);
+        DeleteCommand deleteFirstCommandWithPrefixes =
+                new RangeDeleteCommand(INDEX_FIRST_PERSON, INDEX_SECOND_PERSON, Map.of(PREFIX_SYMPTOM, List.of()));
 
         // same object -> returns true
         assertTrue(deleteFirstCommand.equals(deleteFirstCommand));
 
         // same values -> returns true
-        DeleteCommand deleteFirstCommandCopy =
-                new RangeDeleteCommand(INDEX_FIRST_PERSON, INDEX_SECOND_PERSON);
+        DeleteCommand deleteFirstCommandCopy = new RangeDeleteCommand(INDEX_FIRST_PERSON, INDEX_SECOND_PERSON);
         assertTrue(deleteFirstCommand.equals(deleteFirstCommandCopy));
 
         // different types -> returns false
@@ -265,22 +263,43 @@ public class RangeDeleteCommandTest {
         // null -> returns false
         assertFalse(deleteFirstCommand.equals(null));
 
-        // different people -> returns false
+        // different target indices -> returns false
         assertFalse(deleteFirstCommand.equals(deleteSecondCommand));
+
+        // same target indices but different command type -> returns true
+        DeleteCommand deleteSingleCommand = new SingleDeleteCommand(INDEX_SECOND_PERSON);
+        assertTrue(deleteSecondCommand.equals(deleteSingleCommand));
 
         // different target indices and different command type -> returns false
         DeleteCommand deleteMultipleCommand = new MultipleDeleteCommand(INDEX_FIRST_PERSON, INDEX_THIRD_PERSON);
         assertFalse(deleteFirstCommand.equals(deleteMultipleCommand));
+
+        // same target indices and same prefixes -> returns true
+        DeleteCommand deleteFirstCommandWithSamePrefixes =
+                new RangeDeleteCommand(INDEX_FIRST_PERSON, INDEX_SECOND_PERSON, Map.of(PREFIX_SYMPTOM, List.of()));
+        assertTrue(deleteFirstCommandWithPrefixes.equals(deleteFirstCommandWithSamePrefixes));
+
+        // same target indices but different prefixes -> returns false
+        assertFalse(deleteFirstCommand.equals(deleteFirstCommandWithPrefixes));
+
+        // same target indices and same prefixes but different command type -> returns true
+        DeleteCommand deleteMultipleCommandWithSamePrefixes = new MultipleDeleteCommand(
+                new Index[]{ INDEX_FIRST_PERSON, INDEX_SECOND_PERSON }, Map.of(PREFIX_SYMPTOM, List.of()));
+        assertTrue(deleteFirstCommandWithSamePrefixes.equals(deleteMultipleCommandWithSamePrefixes));
     }
 
     @Test
     public void toStringMethod() {
-        Index targetIndex = Index.fromOneBased(1);
+        Index startIndex = Index.fromOneBased(1);
+        Index endIndex = Index.fromOneBased(3);
         DeleteCommand deleteCommand =
-                new RangeDeleteCommand(targetIndex, targetIndex, Map.of(PREFIX_NOTES, List.of()));
+                new RangeDeleteCommand(startIndex, endIndex, Map.of(PREFIX_NOTES, List.of()));
         String expected = RangeDeleteCommand.class.getCanonicalName()
-                + "{targetIndices=" + Set.of(targetIndex)
-                + ", prefixes=" + Map.of(PREFIX_NOTES, List.of()) + "}";
+                + "{targetIndices=" + List.of(
+                        Index.fromOneBased(1),
+                        Index.fromOneBased(2),
+                        Index.fromOneBased(3))
+                + ", prefixes=" + List.of(Map.entry(PREFIX_NOTES, List.of())) + "}";
         assertEquals(expected, deleteCommand.toString());
     }
 

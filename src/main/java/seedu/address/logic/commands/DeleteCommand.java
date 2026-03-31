@@ -4,10 +4,13 @@ import static java.util.Objects.requireNonNull;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_NOTES;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_SYMPTOM;
 
+import java.util.Comparator;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import seedu.address.commons.core.index.Index;
 import seedu.address.commons.util.ToStringBuilder;
@@ -54,39 +57,45 @@ public abstract class DeleteCommand extends Command {
     public static final String MESSAGE_VALUE_NOT_FOUND =
             "One or more specified person(s) do not have the required value(s) for the specified prefix(es).";
 
-    private Map<Prefix, List<String>> prefixesMap;
+    private final Map<Prefix, List<String>> prefixMap;
 
-    public DeleteCommand(Map<Prefix, List<String>> prefixesMap) {
-        this.prefixesMap = prefixesMap;
+    public DeleteCommand(Map<Prefix, List<String>> prefixMap) {
+        this.prefixMap = prefixMap;
     }
 
-    public Map<Prefix, List<String>> getPrefixesMap() {
-        return prefixesMap;
+    public Map<Prefix, Set<String>> getPrefixMapWithSetValues() {
+        Map<Prefix, Set<String>> prefixMapWithSetValues = new HashMap<>();
+        prefixMap.forEach((prefix, values) -> {
+            Set<String> valuesSet = new HashSet<>(values);
+            valuesSet.remove("");
+            prefixMapWithSetValues.put(prefix, valuesSet);
+        });
+        return prefixMapWithSetValues;
     }
 
     public Set<Prefix> getPrefixes() {
-        return prefixesMap.keySet();
+        return prefixMap.keySet();
     }
 
     public abstract Set<Index> getTargetIndicesAsSet();
 
     public Person getUpdatedPerson(Person personToDelete) throws CommandException {
         requireNonNull(personToDelete);
-        assert !prefixesMap.isEmpty() : "There are no specified fields to delete.";
+        assert !prefixMap.isEmpty() : "There are no specified fields to delete.";
 
-        if (prefixesMap.containsKey(PREFIX_SYMPTOM) && personToDelete.getSymptoms().isEmpty()
-                || prefixesMap.containsKey(PREFIX_NOTES) && personToDelete.getNotes().getValue().isEmpty()) {
+        if (prefixMap.containsKey(PREFIX_SYMPTOM) && personToDelete.getSymptoms().isEmpty()
+                || prefixMap.containsKey(PREFIX_NOTES) && personToDelete.getNotes().getValue().isEmpty()) {
             throw new CommandException(MESSAGE_VALUE_NOT_FOUND);
         }
 
-        List<Symptom> symptomsToDelete = prefixesMap.getOrDefault(PREFIX_SYMPTOM, List.of()).stream()
+        List<Symptom> symptomsToDelete = prefixMap.getOrDefault(PREFIX_SYMPTOM, List.of()).stream()
                 .filter(s -> !s.isEmpty())
                 .map(Symptom::new)
                 .toList();
         Set<Symptom> updatedSymptoms = new HashSet<>(personToDelete.getSymptoms()); // instantiate with all symptoms
-        if (prefixesMap.containsKey(PREFIX_SYMPTOM) && symptomsToDelete.isEmpty()) { // delete all symptoms
+        if (prefixMap.containsKey(PREFIX_SYMPTOM) && symptomsToDelete.isEmpty()) { // delete all symptoms
             updatedSymptoms.clear();
-        } else if (prefixesMap.containsKey(PREFIX_SYMPTOM)) { // delete specified symptoms
+        } else if (prefixMap.containsKey(PREFIX_SYMPTOM)) { // delete specified symptoms
             for (Symptom symptom : symptomsToDelete) {
                 if (!updatedSymptoms.contains(symptom)) {
                     throw new CommandException(MESSAGE_VALUE_NOT_FOUND);
@@ -106,7 +115,7 @@ public abstract class DeleteCommand extends Command {
         NextOfKin nextOfKin = personToDelete.getNextOfKin();
         NextOfKinRelationship nextOfKinRelationship = personToDelete.getNextOfKinRelationship();
         Notes updatedNotes =
-                prefixesMap.containsKey(PREFIX_NOTES) ? new Notes("") : personToDelete.getNotes();
+                prefixMap.containsKey(PREFIX_NOTES) ? new Notes("") : personToDelete.getNotes();
 
         return new Person(name, phone, email, address, updatedSymptoms, ic,
                  urgencyLevel, nextOfKinPhone, doctorName, nextOfKin, nextOfKinRelationship, updatedNotes);
@@ -138,14 +147,19 @@ public abstract class DeleteCommand extends Command {
 
         DeleteCommand otherDeleteCommand = (DeleteCommand) other;
         return this.getTargetIndicesAsSet().equals(otherDeleteCommand.getTargetIndicesAsSet())
-                && this.getPrefixesMap().equals(otherDeleteCommand.getPrefixesMap());
+                && this.getPrefixMapWithSetValues().equals(otherDeleteCommand.getPrefixMapWithSetValues());
     }
 
     @Override
     public String toString() {
         return new ToStringBuilder(this)
-                .add("targetIndices", this.getTargetIndicesAsSet())
-                .add("prefixes", this.getPrefixesMap())
+                .add("targetIndices", this.getTargetIndicesAsSet().stream()
+                        .sorted(Comparator.comparingInt(Index::getOneBased))
+                        .collect(Collectors.toList()))
+                .add("prefixes", this.prefixMap.keySet().stream()
+                        .sorted(Comparator.comparing(Prefix::getPrefix))
+                        .map(p -> p + "=" + prefixMap.get(p))
+                        .collect(Collectors.toList()))
                 .toString();
     }
 }

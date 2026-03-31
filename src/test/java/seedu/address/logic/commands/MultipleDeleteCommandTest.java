@@ -199,7 +199,10 @@ public class MultipleDeleteCommandTest {
     @Test
     public void equals() {
         DeleteCommand deleteFirstCommand = new MultipleDeleteCommand(INDEX_FIRST_PERSON, INDEX_SECOND_PERSON);
-        DeleteCommand deleteSecondCommand = new MultipleDeleteCommand(INDEX_SECOND_PERSON, INDEX_THIRD_PERSON);
+        DeleteCommand deleteSecondCommand = new MultipleDeleteCommand(INDEX_FIRST_PERSON, INDEX_THIRD_PERSON);
+        DeleteCommand deleteFirstCommandWithPrefixes = new MultipleDeleteCommand(
+                new Index[]{ INDEX_FIRST_PERSON, INDEX_SECOND_PERSON },
+                Map.of(PREFIX_SYMPTOM, List.of(), PREFIX_NOTES, List.of()));
 
         // same object -> returns true
         assertTrue(deleteFirstCommand.equals(deleteFirstCommand));
@@ -214,22 +217,41 @@ public class MultipleDeleteCommandTest {
         // null -> returns false
         assertFalse(deleteFirstCommand.equals(null));
 
-        // different people -> returns false
+        // different target indices -> returns false
         assertFalse(deleteFirstCommand.equals(deleteSecondCommand));
 
         // same target indices but different command type -> returns true
         DeleteCommand deleteRangeCommand = new RangeDeleteCommand(INDEX_FIRST_PERSON, INDEX_SECOND_PERSON);
         assertTrue(deleteFirstCommand.equals(deleteRangeCommand));
+
+        // different target indices and different command type -> returns false
+        DeleteCommand deleteSingleCommand = new SingleDeleteCommand(INDEX_FIRST_PERSON);
+        assertFalse(deleteFirstCommand.equals(deleteSingleCommand));
+
+        // same target indices and same prefixes -> returns true
+        DeleteCommand deleteFirstCommandWithSamePrefixes = new MultipleDeleteCommand(
+                new Index[]{ INDEX_FIRST_PERSON, INDEX_SECOND_PERSON },
+                Map.of(PREFIX_NOTES, List.of(), PREFIX_SYMPTOM, List.of()));
+        assertTrue(deleteFirstCommandWithPrefixes.equals(deleteFirstCommandWithSamePrefixes));
+
+        // same target indices but different prefixes -> returns false
+        assertFalse(deleteFirstCommand.equals(deleteFirstCommandWithPrefixes));
+
+        // same target indices and same prefixes but different command type -> returns true
+        DeleteCommand deleteRangeCommandWithSamePrefixes = new RangeDeleteCommand(
+                INDEX_FIRST_PERSON, INDEX_SECOND_PERSON, Map.of(PREFIX_SYMPTOM, List.of(), PREFIX_NOTES, List.of()));
+        assertTrue(deleteFirstCommandWithSamePrefixes.equals(deleteRangeCommandWithSamePrefixes));
     }
 
     @Test
     public void toStringMethod() {
-        Index targetIndex = Index.fromOneBased(1);
+        Index firstIndex = Index.fromOneBased(1);
+        Index secondIndex = Index.fromOneBased(2);
         DeleteCommand deleteCommand =
-                new MultipleDeleteCommand(new Index[]{ targetIndex }, Map.of(PREFIX_SYMPTOM, List.of()));
+                new MultipleDeleteCommand(new Index[]{ firstIndex, secondIndex }, Map.of(PREFIX_SYMPTOM, List.of()));
         String expected = MultipleDeleteCommand.class.getCanonicalName()
-                + "{targetIndices=" + Set.of(targetIndex)
-                + ", prefixes=" + Map.of(PREFIX_SYMPTOM, List.of()) + "}";
+                + "{targetIndices=" + List.of(firstIndex, secondIndex)
+                + ", prefixes=" + List.of(Map.entry(PREFIX_SYMPTOM, List.of())) + "}";
         assertEquals(expected, deleteCommand.toString());
     }
 
