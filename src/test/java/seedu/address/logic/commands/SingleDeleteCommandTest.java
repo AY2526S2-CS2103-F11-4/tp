@@ -94,6 +94,7 @@ public class SingleDeleteCommandTest {
         assertTrue(hasSymptoms(targetPerson) && hasNotes(targetPerson),
                 "Precondition failed: target person should have symptoms and notes.");
 
+        // delete all symptoms and notes of the target person
         DeleteCommand deleteCommand = new SingleDeleteCommand(INDEX_FIRST_PERSON,
                 Map.of(PREFIX_SYMPTOM, List.of(), PREFIX_NOTES, List.of()));
 
@@ -111,9 +112,22 @@ public class SingleDeleteCommandTest {
     public void execute_missingFieldValueUnfilteredList_throwsCommandException() {
         Person targetPerson = model.getFilteredPersonList().get(INDEX_FIRST_PERSON.getZeroBased());
         targetPerson = modifyPerson(model, targetPerson, false, true);
-        assertTrue(!hasSymptoms(targetPerson) && hasNotes(targetPerson),
-                "Precondition failed: target person should have notes but no symptoms.");
+        assertTrue(!hasSymptoms(targetPerson), "Precondition failed: target person should not have symptoms.");
 
+        // delete cough symptom of the target person, but symptom field has no values to delete
+        DeleteCommand deleteCommand =
+                new SingleDeleteCommand(INDEX_FIRST_PERSON, Map.of(PREFIX_SYMPTOM, List.of("cough")));
+
+        assertCommandFailure(deleteCommand, model, DeleteCommand.MESSAGE_VALUE_NOT_FOUND);
+    }
+
+    @Test
+    public void execute_missingFieldValuesUnfilteredList_throwsCommandException() {
+        Person targetPerson = model.getFilteredPersonList().get(INDEX_FIRST_PERSON.getZeroBased());
+        targetPerson = modifyPerson(model, targetPerson, false, true);
+        assertTrue(!hasSymptoms(targetPerson), "Precondition failed: target person should not have symptoms.");
+
+        // delete all symptoms and notes of the target person, but symptom field has no values to delete
         DeleteCommand deleteCommand = new SingleDeleteCommand(INDEX_FIRST_PERSON,
                 Map.of(PREFIX_SYMPTOM, List.of(), PREFIX_NOTES, List.of()));
 
@@ -128,9 +142,11 @@ public class SingleDeleteCommandTest {
         targetPerson = modifyPerson(model, targetPerson, true, true);
         assertTrue(hasSymptoms(targetPerson), "Precondition failed: target person should have symptoms.");
 
-        DeleteCommand deleteCommand = new SingleDeleteCommand(INDEX_FIRST_PERSON, Map.of(PREFIX_SYMPTOM, List.of()));
+        // delete fever symptom of the target person
+        DeleteCommand deleteCommand =
+                new SingleDeleteCommand(INDEX_FIRST_PERSON, Map.of(PREFIX_SYMPTOM, List.of("fever")));
 
-        Person expectedPerson = new PersonBuilder(targetPerson).withSymptoms().build();
+        Person expectedPerson = new PersonBuilder(targetPerson).withSymptoms("cough").build();
         String expectedMessage = String.format(
                 DeleteCommand.MESSAGE_DELETE_FIELD_SUCCESS, Messages.format(expectedPerson));
 
@@ -149,6 +165,7 @@ public class SingleDeleteCommandTest {
         targetPerson = modifyPerson(model, targetPerson, true, false);
         assertTrue(!hasNotes(targetPerson), "Precondition failed: target person should not have notes.");
 
+        // delete notes of the target person but notes field has no value to delete
         DeleteCommand deleteCommand = new SingleDeleteCommand(INDEX_FIRST_PERSON, Map.of(PREFIX_NOTES, List.of()));
 
         assertCommandFailure(deleteCommand, model, DeleteCommand.MESSAGE_VALUE_NOT_FOUND);
@@ -262,15 +279,15 @@ public class SingleDeleteCommandTest {
     private Person modifyPerson(Model model, Person personToModify, boolean hasSymptoms, boolean hasNotes) {
         PersonBuilder modifiedPersonBuilder = new PersonBuilder(personToModify);
 
-        if (hasSymptoms && !hasSymptoms(personToModify)) {
+        if (hasSymptoms) {
             modifiedPersonBuilder.withSymptoms("fever", "cough");
-        } else if (!hasSymptoms && hasSymptoms(personToModify)) {
+        } else {
             modifiedPersonBuilder.withSymptoms();
         }
 
-        if (hasNotes && !hasNotes(personToModify)) {
+        if (hasNotes) {
             modifiedPersonBuilder.withNotes("Stays up late to do CS2103");
-        } else if (!hasNotes && hasNotes(personToModify)) {
+        } else {
             modifiedPersonBuilder.withNotes("");
         }
 

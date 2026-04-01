@@ -158,12 +158,13 @@ public class RangeDeleteCommandTest {
         assertTrue(hasNotes(secondTargetPerson), "Precondition failed: target person should have notes.");
         assertTrue(hasNotes(thirdTargetPerson), "Precondition failed: target person should have notes.");
 
-        DeleteCommand deleteCommand =
-                new RangeDeleteCommand(INDEX_FIRST_PERSON, INDEX_THIRD_PERSON, Map.of(PREFIX_NOTES, List.of()));
+        // delete notes and fever and headache symptoms of the target persons
+        DeleteCommand deleteCommand = new RangeDeleteCommand(INDEX_FIRST_PERSON, INDEX_THIRD_PERSON,
+                Map.of(PREFIX_NOTES, List.of(), PREFIX_SYMPTOM, List.of("fever", "headache")));
 
-        Person firstExpectedPerson = new PersonBuilder(firstTargetPerson).withNotes("").build();
-        Person secondExpectedPerson = new PersonBuilder(secondTargetPerson).withNotes("").build();
-        Person thirdExpectedPerson = new PersonBuilder(thirdTargetPerson).withNotes("").build();
+        Person firstExpectedPerson = new PersonBuilder(firstTargetPerson).withSymptoms("cough").withNotes("").build();
+        Person secondExpectedPerson = new PersonBuilder(secondTargetPerson).withSymptoms("cough").withNotes("").build();
+        Person thirdExpectedPerson = new PersonBuilder(thirdTargetPerson).withSymptoms("cough").withNotes("").build();
         String expectedMessage = String.format(DeleteCommand.MESSAGE_DELETE_FIELD_SUCCESS,
                 "\n" + Messages.format(firstExpectedPerson) + "\n" + Messages.format(secondExpectedPerson)
                         + "\n" + Messages.format(thirdExpectedPerson));
@@ -183,6 +184,7 @@ public class RangeDeleteCommandTest {
         assertTrue(!hasSymptoms(secondTargetPerson),
                 "Precondition failed: target person should not have symptoms.");
 
+        // delete all symptoms of target persons, but symptom field of one does not have values to delete
         DeleteCommand deleteCommand =
                 new RangeDeleteCommand(INDEX_FIRST_PERSON, INDEX_THIRD_PERSON, Map.of(PREFIX_SYMPTOM, List.of()));
 
@@ -199,16 +201,17 @@ public class RangeDeleteCommandTest {
         firstTargetPerson = modifyPerson(model, firstTargetPerson, true, true);
         secondTargetPerson = modifyPerson(model, secondTargetPerson, true, true);
         thirdTargetPerson = modifyPerson(model, thirdTargetPerson, true, true);
-        assertTrue(hasNotes(firstTargetPerson), "Precondition failed: target person should have notes.");
-        assertTrue(hasNotes(secondTargetPerson), "Precondition failed: target person should have notes.");
-        assertTrue(hasNotes(thirdTargetPerson), "Precondition failed: target person should have notes.");
+        assertTrue(hasSymptoms(firstTargetPerson), "Precondition failed: target person should have symptoms.");
+        assertTrue(hasSymptoms(secondTargetPerson), "Precondition failed: target person should have symptoms.");
+        assertTrue(hasSymptoms(thirdTargetPerson), "Precondition failed: target person should have symptoms.");
 
+        // delete all symptoms of target persons
         DeleteCommand deleteCommand =
-                new RangeDeleteCommand(INDEX_FIRST_PERSON, INDEX_THIRD_PERSON, Map.of(PREFIX_NOTES, List.of()));
+                new RangeDeleteCommand(INDEX_FIRST_PERSON, INDEX_THIRD_PERSON, Map.of(PREFIX_SYMPTOM, List.of()));
 
-        Person firstExpectedPerson = new PersonBuilder(firstTargetPerson).withNotes("").build();
-        Person secondExpectedPerson = new PersonBuilder(secondTargetPerson).withNotes("").build();
-        Person thirdExpectedPerson = new PersonBuilder(thirdTargetPerson).withNotes("").build();
+        Person firstExpectedPerson = new PersonBuilder(firstTargetPerson).withSymptoms().build();
+        Person secondExpectedPerson = new PersonBuilder(secondTargetPerson).withSymptoms().build();
+        Person thirdExpectedPerson = new PersonBuilder(thirdTargetPerson).withSymptoms().build();
         String expectedMessage = String.format(DeleteCommand.MESSAGE_DELETE_FIELD_SUCCESS,
                 "\n" + Messages.format(firstExpectedPerson) + "\n" + Messages.format(secondExpectedPerson)
                         + "\n" + Messages.format(thirdExpectedPerson));
@@ -227,12 +230,13 @@ public class RangeDeleteCommandTest {
         showPersonsInIndexRange(model, INDEX_FIRST_PERSON, INDEX_THIRD_PERSON);
 
         Person secondTargetPerson = model.getFilteredPersonList().get(INDEX_SECOND_PERSON.getZeroBased());
-        secondTargetPerson = modifyPerson(model, secondTargetPerson, false, true);
-        assertTrue(!hasSymptoms(secondTargetPerson),
-                "Precondition failed: target person should not have symptoms.");
+        secondTargetPerson = modifyPerson(model, secondTargetPerson, false, false);
+        assertTrue(!hasNotes(secondTargetPerson),
+                "Precondition failed: target person should not have notes.");
 
+        // delete all notes of target persons, but notes field of one has no value to delete
         DeleteCommand deleteCommand =
-                new RangeDeleteCommand(INDEX_FIRST_PERSON, INDEX_THIRD_PERSON, Map.of(PREFIX_SYMPTOM, List.of()));
+                new RangeDeleteCommand(INDEX_FIRST_PERSON, INDEX_THIRD_PERSON, Map.of(PREFIX_NOTES, List.of()));
 
         assertCommandFailure(deleteCommand, model, DeleteCommand.MESSAGE_VALUE_NOT_FOUND);
     }
@@ -349,15 +353,15 @@ public class RangeDeleteCommandTest {
     private Person modifyPerson(Model model, Person personToModify, boolean hasSymptoms, boolean hasNotes) {
         PersonBuilder modifiedPersonBuilder = new PersonBuilder(personToModify);
 
-        if (hasSymptoms && !hasSymptoms(personToModify)) {
-            modifiedPersonBuilder.withSymptoms("fever", "cough");
-        } else if (!hasSymptoms && hasSymptoms(personToModify)) {
+        if (hasSymptoms) {
+            modifiedPersonBuilder.withSymptoms("fever", "cough", "headache");
+        } else {
             modifiedPersonBuilder.withSymptoms();
         }
 
-        if (hasNotes && !hasNotes(personToModify)) {
+        if (hasNotes) {
             modifiedPersonBuilder.withNotes("Stays up late to do CS2103");
-        } else if (!hasNotes && hasNotes(personToModify)) {
+        } else {
             modifiedPersonBuilder.withNotes("");
         }
 
