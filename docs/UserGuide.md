@@ -77,7 +77,7 @@ Records comprehensive patient information (name, identification, contact details
 * **`s/` (Symptoms):** Must be alphanumeric.
 * **`n/` (Notes):** Maximum length of 500 characters.
 
->**Tip:** A person can have any number of symptoms (including 0).
+>**Tip:** A patient can have any number of symptoms (including 0).
 
 **Examples:**
 * `add pn/John Doe Jun Kai ic/T0123456B p/12345678 u/high d/Dr Tan Ah Beng nk/Mary Doe nkp/87654321 nkr/Mother s/Diabetic n/Admitted at 12pm`
