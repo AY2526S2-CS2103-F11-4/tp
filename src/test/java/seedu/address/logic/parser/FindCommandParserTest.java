@@ -17,9 +17,9 @@ import org.junit.jupiter.api.Test;
 
 import seedu.address.logic.commands.FindCommand;
 import seedu.address.model.person.DoctorName;
-import seedu.address.model.person.Ic;
 import seedu.address.model.person.DoctorNameContainsKeywordsPredicate;
 import seedu.address.model.person.EmailContainsKeywordsPredicate;
+import seedu.address.model.person.Ic;
 import seedu.address.model.person.NameContainsKeywordsPredicate;
 
 public class FindCommandParserTest {
@@ -98,6 +98,7 @@ public class FindCommandParserTest {
     public void parse_invalidDoctorPrefix_throwsParseException() {
         assertParseFailure(parser, " d/John123", DoctorName.MESSAGE_CONSTRAINTS);
         assertParseFailure(parser, " d/Dr@Smith", DoctorName.MESSAGE_CONSTRAINTS);
+        assertParseFailure(parser, " d/@", DoctorName.MESSAGE_CONSTRAINTS);
     }
 
     @Test
