@@ -48,13 +48,34 @@ public class FindCommandParserTest {
     }
 
     @Test
-    public void parse_validArgs_returnsFindCommand() {
-        // no leading and trailing whitespaces
-        FindCommand expectedFindCommand = getExpectedNameFindCommand();
-        assertParseSuccess(parser, "Alice Bob", expectedFindCommand);
+    public void parse_unprefixedName_throwsParseException() {
+        assertParseFailure(parser, "Alice Bob",
+                "Find requires at least one search prefix. Only pn/, ic/, p/, e/, and d/ are allowed.\n"
+                        + FindCommand.MESSAGE_USAGE);
+        assertParseFailure(parser, " \n Alice \n \t Bob  \t",
+                "Find requires at least one search prefix. Only pn/, ic/, p/, e/, and d/ are allowed.\n"
+                        + FindCommand.MESSAGE_USAGE);
+    }
 
-        // multiple whitespaces between keywords
-        assertParseSuccess(parser, " \n Alice \n \t Bob  \t", expectedFindCommand);
+    @Test
+    public void parse_unknownPrefix_throwsParseException() {
+        assertParseFailure(parser, " n/asthma",
+                "Find only accepts these prefixes: pn/, ic/, p/, e/, and d/.\n" + FindCommand.MESSAGE_USAGE);
+        assertParseFailure(parser, " nk/family",
+                "Find only accepts these prefixes: pn/, ic/, p/, e/, and d/.\n" + FindCommand.MESSAGE_USAGE);
+    }
+
+    @Test
+    public void parse_preambleBeforePrefix_throwsParseException() {
+        assertParseFailure(parser, " extra pn/Alice",
+                "Text before the first search prefix is not allowed. Start with a prefix such as pn/ or ic/.\n"
+                        + FindCommand.MESSAGE_USAGE);
+    }
+
+    @Test
+    public void parse_unknownPrefixInsideNameValue_throwsParseException() {
+        assertParseFailure(parser, " pn/Alice n/secret",
+                "Find only accepts these prefixes: pn/, ic/, p/, e/, and d/.\n" + FindCommand.MESSAGE_USAGE);
     }
 
     @Test
