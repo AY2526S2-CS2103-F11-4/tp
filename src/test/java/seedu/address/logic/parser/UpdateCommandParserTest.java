@@ -211,9 +211,9 @@ public class UpdateCommandParserTest {
 
     @Test
     public void parse_multipleIndicesWithSpaces_failure() {
-        String expectedMessage = String.format(MESSAGE_INVALID_COMMAND_FORMAT, SingleUpdateCommand.MESSAGE_USAGE);
+        // CHANGE: Expect MultipleUpdateCommand.MESSAGE_USAGE because the preamble contains a comma
+        String expectedMessage = String.format(MESSAGE_INVALID_COMMAND_FORMAT, MultipleUpdateCommand.MESSAGE_USAGE);
 
-        // Ensures spaces in the comma-separated indices are rejected immediately
         assertParseFailure(parser, "1, 2" + PHONE_DESC_AMY, expectedMessage);
         assertParseFailure(parser, "1 ,2" + PHONE_DESC_AMY, expectedMessage);
     }
@@ -232,10 +232,9 @@ public class UpdateCommandParserTest {
 
     @Test
     public void parse_trailingCommas_failure() {
-        // The expected error message shown in your GUI screenshot
-        String expectedMessage = String.format(MESSAGE_INVALID_COMMAND_FORMAT, SingleUpdateCommand.MESSAGE_USAGE);
+        // CHANGE: Expect MultipleUpdateCommand.MESSAGE_USAGE because of the commas
+        String expectedMessage = String.format(MESSAGE_INVALID_COMMAND_FORMAT, MultipleUpdateCommand.MESSAGE_USAGE);
 
-        // Tests the parser with trailing commas and a valid prefix
         assertParseFailure(parser, "1,2,3,,," + PHONE_DESC_AMY, expectedMessage);
     }
 }
