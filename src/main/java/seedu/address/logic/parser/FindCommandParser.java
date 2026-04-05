@@ -16,7 +16,6 @@ import seedu.address.logic.commands.FindCommand;
 import seedu.address.logic.parser.exceptions.ParseException;
 import seedu.address.model.person.DoctorNameContainsKeywordsPredicate;
 import seedu.address.model.person.EmailContainsKeywordsPredicate;
-import seedu.address.model.person.IcContainsKeywordsPredicate;
 import seedu.address.model.person.NameContainsKeywordsPredicate;
 import seedu.address.model.person.Person;
 
@@ -75,7 +74,7 @@ public class FindCommandParser implements Parser<FindCommand> {
         if (hasIc) {
             String icArg = argMultimap.getValue(PREFIX_IC).get().trim();
             predicate = makePredicate(predicate, criteriaBuilder, "IC Number: ", icArg,
-                    arg -> new IcContainsKeywordsPredicate(Arrays.asList(arg)));
+                    arg -> person -> person.getIc().value.equalsIgnoreCase(arg));
         }
 
         if (hasPhone) {
