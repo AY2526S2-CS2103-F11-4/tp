@@ -258,12 +258,11 @@ The activity diagram below summarizes parsing and execution outcomes:
 ### Add feature
 
 #### Implementation
-The add command lets users add a new patient to the address book. It is facilitated by the `AddCommand` and `AddCommandParser` classes. The behavior is as follows:
+The add command lets users add a new patient to the address book. It is facilitated by the `AddCommand` and `AddCommandParser` classes.
 
-1. Within the `AddCommandParser#parse` method, the arguments are tokenized using `ArgumentTokenizer#tokenize`. The tokenizer splits the raw input argument into key-value mappings based on the defined prefixes. Each prefix is associated with its corresponding parameter. Each parameter is then validated and parsed into the appropriate type using methods in the `ParserUtil` class (e.g. `ParserUtil#parseIc`, `ParserUtil#parseUrgency`, etc.).
-2. After all parameters are parsed and validated, a `Person` object is created with the parsed parameters, and an `AddCommand` object is returned with that `Person` object as a parameter.
-3. The `LogicManager` then executes the `AddCommand` object by calling its `execute` method.
-4. Within the `AddCommand#execute` method, the command first checks for duplicate patients by calling `Model#hasPerson`. If a duplicate is found, a `CommandException` is thrown. If not, the new patient is added to the model using `Model#addPerson`, and a success message is returned.
+**`AddCommandParser`** — Tokenizes the raw input arguments then validates and parses each parameter (e.g. \<IC\>, \<ADDRESS\>) and constructs a `Person` object. It then returns an `AddCommand` initialized with that `Person`.
+
+**`AddCommand`** — When executed, it checks for duplicate patients before adding the new `Person` to the `Model`.
 
 Here is a sequence diagram of the logic component when a **valid** add command is executed:
 
@@ -705,8 +704,16 @@ testers are expected to do more *exploratory* testing.
 
 ### Saving data
 
-1. Dealing with missing/corrupted data files
+1. Dealing with corrupted data files
 
-    1. _{explain how to simulate a missing/corrupted file, and the expected behavior}_
+   1. Locate the data file (e.g. `data/addressbook.json`) and open it with a text editor. Corrupt the data by changing the content to an invalid JSON format (e.g. delete a closing bracket).
+   
+   2. Re-launch the application.<br>
+      Expected: The app should start with an empty address book.
 
-1. _{ more test cases …​ }_
+2. Dealing with missing data files
+
+   1. Delete the data file (e.g. `data/addressbook.json`).
+    
+   2. Re-launch the application.<br>
+      Expected: The app should start with an empty address book.
