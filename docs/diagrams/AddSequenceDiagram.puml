@@ -6,7 +6,7 @@ box Logic LOGIC_COLOR_T1
 participant ":LogicManager" as LogicManager LOGIC_COLOR
 participant ":AddressBookParser" as AddressBookParser LOGIC_COLOR
 participant ":AddCommandParser" as AddCommandParser LOGIC_COLOR
-participant "d:AddCommand" as AddCommand LOGIC_COLOR
+participant ":AddCommand" as AddCommand LOGIC_COLOR
 participant "r:CommandResult" as CommandResult LOGIC_COLOR
 participant "p:Person" as Person LOGIC_COLOR
 end box
@@ -39,7 +39,7 @@ Person --> AddCommandParser
 deactivate Person
 
 create AddCommand
-AddCommandParser -> AddCommand : AddCommand(Person person)
+AddCommandParser -> AddCommand : AddCommand(p)
 activate AddCommand
 
 AddCommand --> AddCommandParser :
@@ -54,16 +54,16 @@ destroy AddCommandParser
 AddressBookParser --> LogicManager :
 deactivate AddressBookParser
 
-LogicManager -> AddCommand : execute(Model model)
+LogicManager -> AddCommand : execute(m)
 activate AddCommand
 
-AddCommand -> Model : hasPerson(Person person)
+AddCommand -> Model : hasPerson(p)
 activate Model
 
 Model --> AddCommand : false
 deactivate Model
 
-AddCommand -> Model : addPerson(Person person)
+AddCommand -> Model : addPerson(p)
 activate Model
 
 Model --> AddCommand
