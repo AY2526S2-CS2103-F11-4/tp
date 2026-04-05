@@ -259,7 +259,7 @@ The activity diagram below summarizes parsing and execution outcomes:
 
 #### Implementation
 
-The command history navigation feature allows users to cycle through previously successfully executed commands using the up/down arrow keys. The command history is kept so that no duplicated commands. This is implemented in the `CommandHistory` class, which maintains a list of previously executed commands strings that are trimmed to remove leading and trailing whitespaces, a pointer to the current position in that history, and the current user input being typed.
+The command history navigation feature allows users to cycle through previously successfully executed commands using the up/down arrow keys. The command history is kept so that no duplicated commands. This is implemented in the `CommandHistory` class, which maintains a list of previously executed commands strings that are trimmed to remove leading and trailing whitespaces, a pointer to the current position in that history, and the current user input being typed. The command history is session-based, meaning that the command history is cleared when the app is closed and does not persist across sessions.
 
 The `CommandHistory` class provides the following methods:
 * `CommandHistory#add(String command)` — Adds a new command to the history and resets the pointer to the end of the list.
@@ -305,7 +305,7 @@ Here is a sequence diagram showing how the command history navigation works when
 
 <box type="info" seamless>
 
-Note that `getPreviousCommand("")` method is taking in an empty string, that means that the user has not typed anything in the command input field before pressing the up arrow key.
+Note that `getPreviousCommand("")` method is taking in an empty string, that means that the user has not typed anything in the command box before pressing the up arrow key.
 
 </box>
 
