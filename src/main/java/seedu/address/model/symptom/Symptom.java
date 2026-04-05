@@ -24,8 +24,9 @@ public class Symptom {
      */
     public Symptom(String symptomName) {
         requireNonNull(symptomName);
-        checkArgument(isValidSymptomName(symptomName), MESSAGE_CONSTRAINTS);
-        this.symptomName = symptomName;
+        String trimmedSymptomName = symptomName.trim();
+        checkArgument(isValidSymptomName(trimmedSymptomName), MESSAGE_CONSTRAINTS);
+        this.symptomName = trimmedSymptomName;
     }
 
     /**

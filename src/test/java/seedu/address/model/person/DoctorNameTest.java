@@ -19,6 +19,13 @@ public class DoctorNameTest {
     }
 
     @Test
+    public void constructor_withLeadingAndTrailingWhitespaces_success() {
+        String validName = "   Dr. Jane Doe  ";
+        DoctorName doctorName = new DoctorName(validName);
+        assertEquals("Dr. Jane Doe", doctorName.getFullName()); // should trim whites
+    }
+
+    @Test
     public void constructor_nullName_throwsNullPointerException() {
         assertThrows(NullPointerException.class, () -> new DoctorName(null));
     }
@@ -34,11 +41,6 @@ public class DoctorNameTest {
         assertThrows(IllegalArgumentException.class, () -> new DoctorName(invalidName));
     }
 
-    @Test
-    public void constructor_withLeadingAndTrailingWhitespaces_throwsIllegalArgumentException() {
-        String invalidName = "   Dr. Jane Doe  ";
-        assertThrows(IllegalArgumentException.class, () -> new DoctorName(invalidName));
-    }
 
     // isValidName tests
     @Test
@@ -56,6 +58,8 @@ public class DoctorNameTest {
         assertFalse(DoctorName.isValidName("Dr@John")); // invalid characters
         assertFalse(DoctorName.isValidName("John123")); // numbers not allowed
         assertFalse(DoctorName.isValidName("Dr#Jane!")); // special characters #!
+        assertFalse(DoctorName.isValidName("   ")); // only whitespaces
+        assertFalse(DoctorName.isValidName("-Dr. John")); // does not start with an alphabetic character
     }
 
     // Equals and hashCode tests

@@ -28,14 +28,13 @@ public class NextOfKin {
     /**
      * Constructs a {@code NextOfKin}.
      *
-     * @param name A valid doctor name.
+     * @param nextOfKinName A valid next-of-kin name.
      */
-    public NextOfKin(String name) {
-        Objects.requireNonNull(name);
-
-        requireNonNull(name);
-        checkArgument(isValidNextOfKin(name), MESSAGE_CONSTRAINTS);
-        fullName = name;
+    public NextOfKin(String nextOfKinName) {
+        requireNonNull(nextOfKinName);
+        String trimmedNextOfKinName = nextOfKinName.trim();
+        checkArgument(isValidNextOfKin(trimmedNextOfKinName), MESSAGE_CONSTRAINTS);
+        fullName = trimmedNextOfKinName;
     }
 
     /**

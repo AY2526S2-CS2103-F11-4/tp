@@ -20,12 +20,13 @@ public class NextOfKinPhone {
     /**
      * Constructs a {@code Phone}.
      *
-     * @param phone A valid phone number.
+     * @param nextOfKinPhone A valid next-of-kin phone number.
      */
-    public NextOfKinPhone(String phone) {
-        requireNonNull(phone);
-        checkArgument(isValidNextOfKinPhone(phone), MESSAGE_CONSTRAINTS);
-        value = phone;
+    public NextOfKinPhone(String nextOfKinPhone) {
+        requireNonNull(nextOfKinPhone);
+        String trimmedNextOfKinPhone = nextOfKinPhone.trim();
+        checkArgument(isValidNextOfKinPhone(trimmedNextOfKinPhone), MESSAGE_CONSTRAINTS);
+        value = trimmedNextOfKinPhone;
     }
 
     /**

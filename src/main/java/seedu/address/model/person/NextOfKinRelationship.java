@@ -27,8 +27,9 @@ public class NextOfKinRelationship {
      */
     public NextOfKinRelationship(String label) {
         requireNonNull(label);
-        checkArgument(isValidNextOfKinRelationship(label), MESSAGE_CONSTRAINTS);
-        this.label = label;
+        String trimmedLabel = label.trim();
+        checkArgument(isValidNextOfKinRelationship(trimmedLabel), MESSAGE_CONSTRAINTS);
+        this.label = trimmedLabel;
     }
 
     /**

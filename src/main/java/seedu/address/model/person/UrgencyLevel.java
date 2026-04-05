@@ -52,8 +52,9 @@ public class UrgencyLevel implements Comparable<UrgencyLevel> {
      */
     public UrgencyLevel(String level) {
         requireNonNull(level);
-        checkArgument(isValidUrgencyLevel(level), MESSAGE_CONSTRAINTS);
-        this.level = Level.valueOf(level.toUpperCase());
+        String trimmedLevel = level.trim();
+        checkArgument(isValidUrgencyLevel(trimmedLevel), MESSAGE_CONSTRAINTS);
+        this.level = Level.valueOf(trimmedLevel.toUpperCase());
     }
 
     /**

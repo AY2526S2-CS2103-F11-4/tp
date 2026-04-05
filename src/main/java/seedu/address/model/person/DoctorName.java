@@ -22,12 +22,13 @@ public class DoctorName {
     /**
      * Constructs a {@code DoctorName}.
      *
-     * @param name A valid doctor name.
+     * @param doctorName A valid doctor name.
      */
-    public DoctorName(String name) {
-        requireNonNull(name);
-        checkArgument(isValidName(name), MESSAGE_CONSTRAINTS);
-        this.fullName = name;
+    public DoctorName(String doctorName) {
+        requireNonNull(doctorName);
+        String trimmedDoctorName = doctorName.trim();
+        checkArgument(isValidName(trimmedDoctorName), MESSAGE_CONSTRAINTS);
+        this.fullName = trimmedDoctorName;
     }
 
     /**

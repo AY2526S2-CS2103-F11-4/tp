@@ -28,8 +28,9 @@ public class Notes {
      */
     public Notes(String notes) {
         requireNonNull(notes);
-        checkArgument(isValidNotes(notes), MESSAGE_CONSTRAINTS);
-        this.value = notes;
+        String trimmedNotes = notes.trim();
+        checkArgument(isValidNotes(trimmedNotes), MESSAGE_CONSTRAINTS);
+        this.value = trimmedNotes;
     }
 
     /**
