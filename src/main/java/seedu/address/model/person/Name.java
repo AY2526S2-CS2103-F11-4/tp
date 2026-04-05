@@ -10,8 +10,9 @@ import static seedu.address.commons.util.AppUtil.checkArgument;
 public class Name {
 
     public static final String MESSAGE_CONSTRAINTS =
-            "For the names, please use only these characters: (A-Z, a-z), spaces, comma (,), hyphens (-), "
-                    + "apostrophe (‘), period (.)";
+            "Patient name can contain: (A-Z, a-z), whitespaces, comma (,), "
+                    + "hyphens (-), apostrophe (‘), period (.).\n"
+                    + "The patient name should not be empty and must start with a letter.\n";
 
     /*
      * The first character of the address must not be a whitespace,

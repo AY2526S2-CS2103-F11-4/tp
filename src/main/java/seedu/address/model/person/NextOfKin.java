@@ -12,8 +12,9 @@ import java.util.Objects;
 public class NextOfKin {
 
     public static final String MESSAGE_CONSTRAINTS =
-            "For next-of-kin, please use only these characters: (A-Z, a-z), spaces, comma (,), "
-                    + "hyphens (-), apostrophe (‘), period (.) for the name of next-of-kin.";
+            "Next-of-kin name can contain: (A-Z, a-z), whitespaces, comma (,), "
+                    + "hyphens (-), apostrophe (‘), period (.).\n"
+                    + "The next-of-kin name should not be empty and must start with a letter.\n";
 
     public static final String MESSAGE_EMPTY =
             "The next-of-kin field cannot be empty.";

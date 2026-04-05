@@ -10,12 +10,11 @@ import static seedu.address.commons.util.AppUtil.checkArgument;
 public class DoctorName {
 
     public static final String MESSAGE_CONSTRAINTS =
-            "For the names, please use only these characters: (A-Z, a-z), spaces, comma (,), "
-                    + "hyphens (-), apostrophe (‘), period (.) for the doctor name.";
+            "Doctor name can contain: (A-Z, a-z), whitespaces, comma (,), "
+                    + "hyphens (-), apostrophe (‘), period (.).\n"
+                    + "The doctor name should not be empty and must start with a letter.\n";
 
 
-    // Regex: letters + allowed punctuation + spaces
-    // ^ start, $ end
     public static final String VALIDATION_REGEX = "[A-Za-z][A-Za-z ,.'-]*";
 
     private final String fullName;

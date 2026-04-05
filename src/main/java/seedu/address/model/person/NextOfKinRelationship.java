@@ -16,8 +16,6 @@ public class NextOfKinRelationship {
     public static final String MESSAGE_EMPTY =
             "The next-of-kin relationship field cannot be empty.";
 
-    // Regex: letters + allowed punctuation + spaces
-    // ^ start, $ end
     public static final String VALIDATION_REGEX = "[A-Za-z][A-Za-z ,.'-]*";
 
     private final String label;

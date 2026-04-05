@@ -11,7 +11,9 @@ public class NextOfKinPhone {
 
 
     public static final String MESSAGE_CONSTRAINTS =
-            "Phone numbers should only contain numbers, and it should only be 8 digits long";
+            "Next-of-kin phone numbers should only contain numbers, and it should only be 8 digits long\n"
+                    + "Next-of-kin phone number cannot be left blank.";
+
     public static final String VALIDATION_REGEX = "\\d{8}";
     public final String value;
 
