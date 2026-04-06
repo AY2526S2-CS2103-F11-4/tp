@@ -63,7 +63,7 @@ Shows a message explaining how to access the help page.
 
 Records comprehensive patient information, add it to the address book and saves it to the hard disk.
 
-**Format:** `add pn/<PATIENT_NAME> ic/<IC_NUMBER> p/<PATIENT_PHONE_NUMBER> a/<ADDRESS> e/<EMAIL_ADDRESS> u/<URGENCY_LEVEL> d/<DOCTOR_NAME> nk/<NEXT_OF_KIN_NAME> nkp/<NEXT_OF_KIN_PHONE_NUMBER> nkr/<NEXT_OF_KIN_RELATIONSHIP> [s/<SYMPTOMS>] [n/<NOTES>]`
+**Format:** `add pn/<PATIENT_NAME> ic/<IC> p/<PATIENT_PHONE> a/<ADDRESS> e/<EMAIL> u/<LEVEL> d/<DOCTOR> nk/<NEXT_OF_KIN_NAME> nkp/<NEXT_OF_KIN_PHONE_NUMBER> nkr/<NEXT_OF_KIN_RELATIONSHIP> [s/<SYMPTOMS>] [n/<NOTES>]`
 * The prefixes `pn/`, `ic/`, `p/`, `a/`, `e/`, `u/`, `d/`, `nk/`, `nkp/`, and `nkr/` are **compulsory** and **must not be blank**.
 * The prefixes `s/` and `n/` are **optional**.
 * The same prefix cannot be provided more than once **except** for `s/` (symptoms).
