@@ -6,8 +6,6 @@ import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import javax.print.Doc;
-
 import org.junit.jupiter.api.Test;
 
 public class DoctorNameTest {
