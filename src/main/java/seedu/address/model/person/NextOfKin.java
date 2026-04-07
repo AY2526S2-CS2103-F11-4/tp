@@ -32,6 +32,7 @@ public class NextOfKin {
     public NextOfKin(String name) {
         Objects.requireNonNull(name);
 
+        checkArgument(!name.trim().isEmpty(), MESSAGE_EMPTY);
         requireNonNull(name);
         checkArgument(isValidNextOfKin(name), MESSAGE_CONSTRAINTS);
         fullName = name;

@@ -82,4 +82,20 @@ public class NextOfKinRelationshipTest {
         NextOfKinRelationship nok = new NextOfKinRelationship("Sister");
         assertEquals("Sister", nok.toString());
     }
+
+    @Test
+    public void nextOfKinRelationship_emptyString_throwsWithEmptyMessage() {
+        IllegalArgumentException ex = assertThrows(
+                IllegalArgumentException.class, () -> new NextOfKinRelationship("")
+        );
+        assertEquals(NextOfKinRelationship.MESSAGE_EMPTY, ex.getMessage());
+    }
+
+    @Test
+    public void nextOfKinRelationship_whitespaceOnly_throwsWithEmptyMessage() {
+        IllegalArgumentException ex = assertThrows(
+                IllegalArgumentException.class, () -> new NextOfKinRelationship("   ")
+        );
+        assertEquals(NextOfKinRelationship.MESSAGE_EMPTY, ex.getMessage());
+    }
 }

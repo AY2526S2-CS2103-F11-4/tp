@@ -87,4 +87,20 @@ public class NextOfKinTest {
         NextOfKin nextOfKin = new NextOfKin("John Doe");
         assertEquals("John Doe", nextOfKin.toString());
     }
+
+    @Test
+    public void nextOfKin_emptyString_throwsWithEmptyMessage() {
+        IllegalArgumentException ex = assertThrows(
+                IllegalArgumentException.class, () -> new NextOfKin("")
+        );
+        assertEquals(NextOfKin.MESSAGE_EMPTY, ex.getMessage());
+    }
+
+    @Test
+    public void nextOfKin_whitespaceOnly_throwsWithEmptyMessage() {
+        IllegalArgumentException ex = assertThrows(
+                IllegalArgumentException.class, () -> new NextOfKin("   ")
+        );
+        assertEquals(NextOfKin.MESSAGE_EMPTY, ex.getMessage());
+    }
 }
