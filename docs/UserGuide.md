@@ -157,9 +157,9 @@ Displays all patients in the application in a structured list format. You can al
 
 Updates an existing patient's details in ClinicConnect.
 
-**Format:** `update INDEX [pn/<PATIENT_NAME>] [ic/<IC>] [a/<ADDRESS>] [e/<EMAIL>] [p/<PATIENT_PHONE>] [s/<SYMPTOM>] [u/<LEVEL>] [d/<DOCTOR>] [nk/<NEXT_OF_KIN_NAME>] [nkp/<NEXT_OF_KIN_PHONE>] [nkr/<NEXT_OF_KIN_RELATIONSHIP>] [n/<NOTES>]`
+**Format:** `update <INDEX> [pn/<PATIENT_NAME>] [ic/<IC>] [a/<ADDRESS>] [e/<EMAIL>] [p/<PATIENT_PHONE>] [s/<SYMPTOM>] [u/<LEVEL>] [d/<DOCTOR>] [nk/<NEXT_OF_KIN_NAME>] [nkp/<NEXT_OF_KIN_PHONE>] [nkr/<NEXT_OF_KIN_RELATIONSHIP>] [n/<NOTES>]`
 
-* Edits the patient at the specified `INDEX`. The index refers to the index number shown in the displayed patient list. The index **must be a positive integer** (e.g. 1, 2, 3, …).
+* Edits the patient at the specified `<INDEX>`. The index refers to the index number shown in the displayed patient list. The index **must be a positive integer** (e.g. 1, 2, 3, …).
 * **At least one** of the fields must be provided.
 * Existing values will be overwritten by the input values.
 * When editing symptoms, the existing symptoms will be removed (not cumulative).
@@ -318,7 +318,7 @@ Furthermore, certain edits can cause ClinicConnect to behave in unexpected ways 
 | Action | Format                                                                                                                                                                                               | Examples                                                                   |
 | :--- |:-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|:---------------------------------------------------------------------------|
 | **Add** | `add pn/<PATIENT_NAME> ic/<IC> p/<PATIENT_PHONE> a/<ADDRESS> e/<EMAIL> u/<LEVEL> d/<DOCTOR> nk/<NEXT_OF_KIN_NAME> nkp/<NEXT_OF_KIN_PHONE> nkr/<NEXT_OF_KIN_RELATIONSHIP> [s/<SYMPTOMS>] [n/<NOTES>]` | `add pn/John Doe Jun Kai ic/T0123456B p/12345678 a/21 Serangan Road e/john@doe.com u/high d/Dr Tan Ah Beng nk/Mary Doe nkp/87654321 nkr/Mother s/Diabetic n/Admitted at 12pm` |
-| **Update** | `update INDEX [prefix/<VALUE>]...`                                                                                                                                                                   | `update 1 u/extreme n/Immediate surgery required`                                     |
+| **Update** | `update <INDEX> [prefix/<VALUE>]...`                                                                                                                                                                 | `update 1 u/extreme n/Immediate surgery required`                                     |
 | **Search** | `find [pn/<PATIENT_NAME>] [ic/<IC>] [p/<PATIENT_PHONE>] [e/<EMAIL>] [d/<DOCTOR>]`                                                                                                                    | `find e/johndoe@example.com`, `find d/Dr Sally`, `find ic/S1234567A`                  |
 | **Delete** | `delete <INDEX>` <br> `delete <INDEX>,<INDEX>` <br> `delete <START>-<END>` <br> `delete <INDICES> [s/<SYMPTOM>]... [n/]`                                                                             | `delete 3` <br> `delete 1,4` <br> `delete 2-5` <br> `delete 1 s/fever n/`             |
 | **List**   | `list [u/<LEVEL>]... [s/<SYMPTOM>]...`                                                                                                                                                               | `list` <br> `list u/high` <br> `list s/fever s/cough`                                 |
