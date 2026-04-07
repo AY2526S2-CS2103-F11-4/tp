@@ -54,6 +54,7 @@
         "implementation": "Implementation",
         "automatic-triage-sorting": "Automatic Triage Sorting",
         "list-feature": "List feature",
+        "command-history-navigation": "Command History Navigation",
         "proposed-undo-redo-feature": "[Proposed] Undo/redo feature",
         "documentation-logging-testing-configuration-dev-ops": "Documentation, logging, testing, configuration, dev-ops",
         "appendix-requirements": "Appendix: Requirements",
