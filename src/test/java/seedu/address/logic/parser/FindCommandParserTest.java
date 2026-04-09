@@ -18,10 +18,12 @@ import org.junit.jupiter.api.Test;
 import seedu.address.logic.commands.FindCommand;
 import seedu.address.model.person.DoctorName;
 import seedu.address.model.person.DoctorNameContainsKeywordsPredicate;
+import seedu.address.model.person.Email;
 import seedu.address.model.person.EmailContainsKeywordsPredicate;
 import seedu.address.model.person.Ic;
 import seedu.address.model.person.Name;
 import seedu.address.model.person.NameContainsKeywordsPredicate;
+import seedu.address.model.person.Phone;
 
 public class FindCommandParserTest {
 
@@ -45,9 +47,9 @@ public class FindCommandParserTest {
     @Test
     public void parse_emptyArg_throwsParseException() {
         assertParseFailure(parser, "     ",
-                "At least one parameter to search with must be provided. You can use the command 'find'"
-                    + " with the following parameters: pn/NAME, ic/IC_NUMBER, p/PHONE_NUMBER, "
-                    + "e/EMAIL, d/DOCTOR_NAME");
+                "At least one parameter to search with must be provided. You "
+                        + "can use the command 'find' with the following parameters: pn/<PATIENT_NAME>, ic/<IC>,"
+                        + "p/<PATIENT_PHONE>, e/<EMAIL>, d/<DOCTOR>");
     }
 
     @Test
@@ -122,6 +124,21 @@ public class FindCommandParserTest {
     }
 
     @Test
+    public void parse_invalidPhoneTooShort_throwsParseException() {
+        assertParseFailure(parser, " p/1234567", Phone.MESSAGE_CONSTRAINTS);
+    }
+
+    @Test
+    public void parse_invalidPhoneTooLong_throwsParseException() {
+        assertParseFailure(parser, " p/123456789", Phone.MESSAGE_CONSTRAINTS);
+    }
+
+    @Test
+    public void parse_invalidPhoneNonNumeric_throwsParseException() {
+        assertParseFailure(parser, " p/91234abc", Phone.MESSAGE_CONSTRAINTS);
+    }
+
+    @Test
     public void parse_validEmailPrefix_doesNotThrow() {
         assertDoesNotThrow(() -> parser.parse(" e/johndoe@example.com"));
     }
@@ -150,6 +167,17 @@ public class FindCommandParserTest {
     }
 
     @Test
+    public void parse_invalidEmailPrefix_throwsParseException() {
+        assertParseFailure(parser, " e/not-an-email", Email.MESSAGE_CONSTRAINTS);
+        assertParseFailure(parser, " e/bob!yahoo", Email.MESSAGE_CONSTRAINTS);
+    }
+
+    @Test
+    public void parse_emailPrefixOnlyAtSymbol_throwsParseException() {
+        assertParseFailure(parser, " e/@", Email.MESSAGE_CONSTRAINTS);
+    }
+
+    @Test
     public void parse_emptyDoctorPrefix_throwsParseException() {
         assertParseFailure(parser, " d/   ",
                 String.format(MESSAGE_INVALID_COMMAND_FORMAT, FindCommand.MESSAGE_USAGE));
@@ -158,9 +186,9 @@ public class FindCommandParserTest {
     @Test
     public void parse_noFieldsProvided_throwsParseException() {
         assertParseFailure(parser, "",
-                "At least one parameter to search with must be provided. You can use the command 'find'"
-                    + " with the following parameters: pn/NAME, ic/IC_NUMBER, p/PHONE_NUMBER, "
-                    + "e/EMAIL, d/DOCTOR_NAME");
+                "At least one parameter to search with must be provided. You "
+                        + "can use the command 'find' with the following parameters: pn/<PATIENT_NAME>, ic/<IC>,"
+                        + "p/<PATIENT_PHONE>, e/<EMAIL>, d/<DOCTOR>");
     }
 
     @Test
