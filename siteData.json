@@ -67,6 +67,7 @@
         "launch-and-shutdown": "Launch and shutdown",
         "adding-a-person": "Adding a person",
         "deleting-a-person": "Deleting a person",
+        "updating-patient-s": "Updating patient(s)",
         "saving-data": "Saving data"
       },
       "headingKeywords": {}
@@ -117,7 +118,7 @@
         "viewing-help-help": "Viewing help : help",
         "adding-a-patient-add": "Adding a patient: add",
         "listing-all-patients-list": "Listing all patients : list",
-        "updating-a-patient-update": "Updating a patient : update",
+        "updating-patient-s-update": "Updating patient(s) : update",
         "searching-for-a-patient-find": "Searching for a patient : find",
         "deleting-a-patient-delete": "Deleting a patient : delete",
         "undoing-the-last-command-undo": "Undoing the last command : undo",
