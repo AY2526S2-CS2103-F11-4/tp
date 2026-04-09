@@ -10,7 +10,7 @@ public class ExitCommand extends Command {
     public static final String COMMAND_WORD = "exit";
 
     public static final String MESSAGE_EXIT_ACKNOWLEDGEMENT =
-            "I have saved your data! Hope to see you again!";
+            "Saving your data...";
 
     public static final String MESSAGE_USAGE =
             "Usage: exit";
