@@ -45,7 +45,7 @@ public class AddCommand extends Command {
             + PREFIX_PATIENT_PHONE + "98765432 "
             + PREFIX_EMAIL + "johnd@example.com "
             + PREFIX_ADDRESS + "311, Clementi Ave 2, #02-25 "
-            + PREFIX_IC + "S1234567A "
+            + PREFIX_IC + "T1234567A "
             + PREFIX_URGENCY + "high "
             + PREFIX_NEXT_OF_KIN + "John "
             + PREFIX_NEXT_OF_KIN_PHONE + "91234567 "
