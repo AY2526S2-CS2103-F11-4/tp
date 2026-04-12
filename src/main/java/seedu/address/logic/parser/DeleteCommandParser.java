@@ -63,7 +63,8 @@ public class DeleteCommandParser implements Parser<DeleteCommand> {
 
         if (indicesString.contains(MULTIPLE_INDICES_DELIMITER)) {
             return parseMultipleIndices(indicesString, prefixMap);
-        } else if (indicesString.contains(RANGE_INDICES_DELIMITER)) {
+        } else if (indicesString.contains(RANGE_INDICES_DELIMITER)
+                && !indicesString.startsWith(RANGE_INDICES_DELIMITER)) {
             return parseRangeIndices(indicesString, prefixMap);
         } else {
             return parseSingleIndex(indicesString, prefixMap);
