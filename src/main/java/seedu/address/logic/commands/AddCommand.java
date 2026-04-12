@@ -79,7 +79,7 @@ public class AddCommand extends Command {
         requireNonNull(model);
 
         if (model.hasPerson(toAdd)) {
-            throw new CommandException(MESSAGE_DUPLICATE_PERSON + " (" + toAdd.getIc() +").");
+            throw new CommandException(MESSAGE_DUPLICATE_PERSON + " (" + toAdd.getIc() + ").");
         }
 
         model.addPerson(toAdd);
