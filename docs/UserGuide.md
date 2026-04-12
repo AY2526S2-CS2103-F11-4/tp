@@ -233,10 +233,14 @@ Permanently removes patient records from ClinicConnect.
 **Optional fields deletion:** `delete <INDICES> [s/] [n/]`
 * Deletes all the symptoms (`s/`) and/or notes (`n/`) of the patients at the specified indices. `<INDICES>` refers to any of the above index formats.
 * Prefixes must be provided without any parameters (e.g. `n/notes` will be rejected).
+* The patients at the specified indices must have at least 1 value in each of the fields to be deleted.
 
 **Specific values deletion:** `delete <INDICES> [s/<SYMPTOM>]...`
 * Deletes the specified symptoms of the patients at the specified indices. `<INDICES>` refers to any of the above index formats.
 * All prefixes must be provided with parameters (e.g. `s/fever s/` will be rejected).
+* The patients at the specified indices must have all the specified symptoms to be deleted.
+
+>**Tip:** Optional fields deletion for notes and specific values deletion for symptoms can be used together.
 
 **Examples:**
 * `delete 2` deletes the 2nd patient in the list.
@@ -244,6 +248,7 @@ Permanently removes patient records from ClinicConnect.
 * `delete 1-4` deletes the 1st through 4th patients.
 * `delete 1,3 s/ n/` deletes all the symptoms and notes of the 1st and 3rd patients.
 * `delete 2 s/fever s/cough` deletes the symptoms "fever" and "cough" of the 2nd patient.
+* `delete 2,4 s/fever n/` deletes the symptom "fever" and all notes of the 2nd and 4th patients.
 
 ### Undoing the last command : `undo`
 
