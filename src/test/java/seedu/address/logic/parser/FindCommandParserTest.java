@@ -54,12 +54,13 @@ public class FindCommandParserTest {
 
     @Test
     public void parse_unprefixedName_throwsParseException() {
-        assertParseFailure(parser, "Alice Bob",
-                "Find requires at least one search prefix. Only pn/, ic/, p/, e/, and d/ are allowed.\n"
-                        + FindCommand.MESSAGE_USAGE);
-        assertParseFailure(parser, " \n Alice \n \t Bob  \t",
-                "Find requires at least one search prefix. Only pn/, ic/, p/, e/, and d/ are allowed.\n"
-                        + FindCommand.MESSAGE_USAGE);
+        String requiresPrefix = "Find requires at least one search prefix. Only pn/, ic/, p/, e/, and d/ are allowed.\n"
+                + FindCommand.MESSAGE_USAGE;
+        assertParseFailure(parser, "Alice Bob", requiresPrefix);
+        assertParseFailure(parser, " \n Alice \n \t Bob  \t", requiresPrefix);
+        assertParseFailure(parser, "@", requiresPrefix);
+        assertParseFailure(parser, "John123", requiresPrefix);
+        assertParseFailure(parser, "Alice @Bob", requiresPrefix);
     }
 
     @Test
@@ -132,13 +133,6 @@ public class FindCommandParserTest {
         assertParseFailure(parser, " pn/John123", Name.MESSAGE_CONSTRAINTS);
         assertParseFailure(parser, " pn/Alice@Bob", Name.MESSAGE_CONSTRAINTS);
         assertParseFailure(parser, " pn/@", Name.MESSAGE_CONSTRAINTS);
-    }
-
-    @Test
-    public void parse_invalidLegacyPatientName_throwsParseException() {
-        assertParseFailure(parser, "@", Name.MESSAGE_CONSTRAINTS);
-        assertParseFailure(parser, "John123", Name.MESSAGE_CONSTRAINTS);
-        assertParseFailure(parser, "Alice @Bob", Name.MESSAGE_CONSTRAINTS);
     }
 
     @Test
