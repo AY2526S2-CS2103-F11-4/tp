@@ -148,12 +148,12 @@ public class FindCommandParserTest {
 
     @Test
     public void parse_invalidPhoneTooShort_throwsParseException() {
-        assertParseFailure(parser, " p/1234567", Phone.MESSAGE_CONSTRAINTS);
+        assertParseFailure(parser, " p/12", Phone.MESSAGE_CONSTRAINTS);
     }
 
     @Test
     public void parse_invalidPhoneTooLong_throwsParseException() {
-        assertParseFailure(parser, " p/123456789", Phone.MESSAGE_CONSTRAINTS);
+        assertParseFailure(parser, " p/1234567890123456", Phone.MESSAGE_CONSTRAINTS);
     }
 
     @Test
