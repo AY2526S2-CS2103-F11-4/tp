@@ -51,7 +51,7 @@ ClinicConnect is a **desktop app for triage coordinators to manage patient recor
 * All commands and prefixes are case-insensitive.
 * Leading and trailing spaces are ignored/trimmed automatically.
 * Internal spaces within a command (i.e. `d ele te 1`) or prefix (i.e. `p  n/`) are not allowed and will be rejected.
-* Spaces are not allowed before and after the delimiters (i.e. `,` and `-`) in index-based commands (e.g. `update 1 , 2` will be rejected).
+* Spaces are not allowed before or after the delimiters (i.e. `,` and `-`) in index-based commands (e.g. `update 1 , 2` will be rejected).
 
 </box>
     
