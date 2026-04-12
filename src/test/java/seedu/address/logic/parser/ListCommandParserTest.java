@@ -33,6 +33,14 @@ public class ListCommandParserTest {
         expectedModel = new ModelManager(model.getAddressBook(), new UserPrefs());
     }
 
+    @Test
+    public void parse_emptyArgs_listsAllPatients() throws Exception {
+        ListCommand command = parser.parse("");
+        String expectedMessage = String.format(ListCommand.MESSAGE_SUCCESS,
+                model.getFilteredPersonList().size());
+        assertCommandSuccess(command, model, expectedMessage, expectedModel);
+    }
+
     private AddressBook getMedicalAddressBook() {
         AddressBook ab = new AddressBook();
         ab.addPerson(new PersonBuilder()
