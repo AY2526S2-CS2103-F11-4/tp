@@ -10,11 +10,11 @@ import static seedu.address.commons.util.AppUtil.checkArgument;
 public class Ic {
 
     public static final String MESSAGE_CONSTRAINTS =
-            "IC should only contain 1 character at the start, followed by 7 digits, and end with 1 letter. "
+            "IC should only contain 1 letter at the start, followed by 7 digits, and end with 1 letter. "
                     + "It should not be blank.\n"
-                    + "The first character should be S, T, F, G or M.\n"
+                    + "The first letter should be S, T, F, G or M.\n"
                     + "The 7 digits in the middle should be between 0000000 and 9999999.\n"
-                    + "The last character can be any letter from A to Z.";
+                    + "The last letter can be any letter from A to Z.";
 
     public static final String VALIDATION_REGEX = "(?i)^[STFGstfg]\\d{7}[A-Za-z]$";
 
