@@ -1,5 +1,8 @@
 package seedu.address.logic.parser;
 
+import static seedu.address.logic.parser.CommandParserTestUtil.assertParseFailure;
+import static seedu.address.logic.parser.CommandParserTestUtil.assertParseSuccess;
+
 import org.junit.jupiter.api.Test;
 
 import seedu.address.logic.commands.UndoCommand;
@@ -13,20 +16,17 @@ public class UndoCommandParserTest {
 
     @Test
     public void parse_noArguments_success() {
-        UndoCommand command = parser.parse("");
-        assert command != null;
+        assertParseSuccess(parser, "", new UndoCommand());
     }
 
     @Test
     public void parse_emptyString_success() {
-        UndoCommand command = parser.parse("   ");
-        assert command != null;
+        assertParseSuccess(parser, "   ", new UndoCommand());
     }
 
     @Test
-    public void parse_anyArguments_success() {
-        // UndoCommand ignores any arguments passed and returns a valid UndoCommand
-        UndoCommand command = parser.parse("some random text");
-        assert command != null;
+    public void parse_withArguments_throwsParseException() {
+        // UndoCommand should not accept any arguments
+        assertParseFailure(parser, "some random text", UndoCommand.MESSAGE_EXTRA_PARAMETERS);
     }
 }
