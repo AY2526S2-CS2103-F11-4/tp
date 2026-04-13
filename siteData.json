@@ -122,7 +122,7 @@
         "listing-all-patients-list": "Listing all patients : list",
         "updating-patient-s-update": "Updating patient(s) : update",
         "searching-for-a-patient-find": "Searching for a patient : find",
-        "deleting-a-patient-delete": "Deleting a patient : delete",
+        "deleting-patient-s-delete": "Deleting patient(s) : delete",
         "undoing-the-last-command-undo": "Undoing the last command : undo",
         "clearing-all-entries-clear": "Clearing all entries : clear",
         "exiting-safely-exit": "Exiting safely : exit",
