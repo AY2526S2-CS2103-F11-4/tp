@@ -1,6 +1,8 @@
 package seedu.address.logic.commands;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static seedu.address.testutil.Assert.assertThrows;
 import static seedu.address.testutil.TypicalIndexes.INDEX_FIRST_PERSON;
 import static seedu.address.testutil.TypicalPersons.getTypicalAddressBook;
@@ -113,6 +115,15 @@ public class UndoCommandTest {
     public void toString_returnsCommandWord() {
         UndoCommand undoCommand = new UndoCommand();
         assertEquals(UndoCommand.COMMAND_WORD, undoCommand.toString());
+    }
+
+    @Test
+    public void equals() {
+        UndoCommand undoCommand1 = new UndoCommand();
+        UndoCommand undoCommand2 = new UndoCommand();
+        assertTrue(undoCommand1.equals(undoCommand1));
+        assertTrue(undoCommand1.equals(undoCommand2));
+        assertFalse(undoCommand1.equals("undo"));
     }
 
     /**

@@ -14,6 +14,8 @@ public class UndoCommand extends Command {
 
     public static final String MESSAGE_SUCCESS = "Undo successful: reversed the previous command.";
     public static final String MESSAGE_FAILURE = "Cannot undo: no recent action to undo, or undo was already used.";
+    public static final String MESSAGE_USAGE = "Usage: undo";
+    public static final String MESSAGE_EXTRA_PARAMETERS = "There should not be extra parameters.\nUsage: undo";
 
     private Command lastCommand;
 
@@ -40,5 +42,10 @@ public class UndoCommand extends Command {
     @Override
     public String toString() {
         return COMMAND_WORD;
+    }
+
+    @Override
+    public boolean equals(Object other) {
+        return other == this || other instanceof UndoCommand;
     }
 }
