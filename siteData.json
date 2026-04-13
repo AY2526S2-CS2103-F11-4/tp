@@ -119,6 +119,7 @@
         "features": "Features",
         "viewing-help-help": "Viewing help : help",
         "adding-a-patient-add": "Adding a patient: add",
+        "examples": "Examples",
         "listing-all-patients-list": "Listing all patients : list",
         "updating-patient-s-update": "Updating patient(s) : update",
         "searching-for-a-patient-find": "Searching for a patient : find",
@@ -129,8 +130,6 @@
         "automatic-triage-sorting": "Automatic Triage Sorting",
         "command-history-navigation-using-the-up-down-arrow-keys": "Command History navigation using the Up/Down arrow keys",
         "data-management": "Data Management",
-        "saving-the-data": "Saving the data",
-        "editing-the-data-file": "Editing the data file",
         "faq": "FAQ",
         "known-issues": "Known issues",
         "command-summary": "Command Summary"
