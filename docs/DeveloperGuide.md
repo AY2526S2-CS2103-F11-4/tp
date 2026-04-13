@@ -20,6 +20,9 @@ _{ list here sources of all reused/adapted ideas, code, documentation, and third
   * Randy
     * Used Co-pilot for auto-completion.
     * Used ChatGPT to assist in generating regex pattern for user input validation.
+  * Nigel
+    * Used Gemini to assist with debugging logic errors in command execution and parser architecture.
+    * Used Gemini to assist in generating test cases for bulk updates
 --------------------------------------------------------------------------------------------------------------------
 
 ## **Setting up, getting started**
