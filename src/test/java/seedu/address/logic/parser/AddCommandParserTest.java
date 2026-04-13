@@ -438,70 +438,70 @@ public class AddCommandParserTest {
                         + IC_DESC_BOB + URGENCY_LEVEL_DESC_BOB + DOCTOR_NAME_DESC_BOB
                         + NEXT_OF_KIN_PHONE_DESC_BOB + NEXT_OF_KIN_DESC_BOB + NEXT_OF_KIN_RS_DESC_BOB,
                 "Missing required parameter(s): " + PREFIX_PATIENT_NAME
-                        + "\n" + String.format(MESSAGE_INVALID_COMMAND_FORMAT, AddCommand.MESSAGE_USAGE));
+                        + "\n" + AddCommand.MESSAGE_USAGE);
 
         // missing phone prefix
         assertParseFailure(parser, NAME_DESC_BOB + EMAIL_DESC_BOB + ADDRESS_DESC_BOB
                         + IC_DESC_BOB + URGENCY_LEVEL_DESC_BOB + DOCTOR_NAME_DESC_BOB
                         + NEXT_OF_KIN_PHONE_DESC_BOB + NEXT_OF_KIN_DESC_BOB + NEXT_OF_KIN_RS_DESC_BOB,
                 "Missing required parameter(s): " + PREFIX_PATIENT_PHONE
-                        + "\n" + String.format(MESSAGE_INVALID_COMMAND_FORMAT, AddCommand.MESSAGE_USAGE));
+                        + "\n" + AddCommand.MESSAGE_USAGE);
 
         // missing email prefix
         assertParseFailure(parser, NAME_DESC_BOB + PHONE_DESC_BOB + ADDRESS_DESC_BOB
                         + IC_DESC_BOB + URGENCY_LEVEL_DESC_BOB + DOCTOR_NAME_DESC_BOB
                         + NEXT_OF_KIN_PHONE_DESC_BOB + NEXT_OF_KIN_DESC_BOB + NEXT_OF_KIN_RS_DESC_BOB,
                 "Missing required parameter(s): " + PREFIX_EMAIL
-                        + "\n" + String.format(MESSAGE_INVALID_COMMAND_FORMAT, AddCommand.MESSAGE_USAGE));
+                        + "\n" + AddCommand.MESSAGE_USAGE);
 
         // missing address prefix
         assertParseFailure(parser, NAME_DESC_BOB + PHONE_DESC_BOB + EMAIL_DESC_BOB
                         + IC_DESC_BOB + URGENCY_LEVEL_DESC_BOB + DOCTOR_NAME_DESC_BOB
                         + NEXT_OF_KIN_PHONE_DESC_BOB + NEXT_OF_KIN_DESC_BOB + NEXT_OF_KIN_RS_DESC_BOB,
                 "Missing required parameter(s): " + PREFIX_ADDRESS
-                        + "\n" + String.format(MESSAGE_INVALID_COMMAND_FORMAT, AddCommand.MESSAGE_USAGE));
+                        + "\n" + AddCommand.MESSAGE_USAGE);
 
         // missing ic prefix
         assertParseFailure(parser, NAME_DESC_BOB + PHONE_DESC_BOB + EMAIL_DESC_BOB + ADDRESS_DESC_BOB
                         + URGENCY_LEVEL_DESC_BOB + DOCTOR_NAME_DESC_BOB
                         + NEXT_OF_KIN_PHONE_DESC_BOB + NEXT_OF_KIN_DESC_BOB + NEXT_OF_KIN_RS_DESC_BOB,
                 "Missing required parameter(s): " + PREFIX_IC
-                        + "\n" + String.format(MESSAGE_INVALID_COMMAND_FORMAT, AddCommand.MESSAGE_USAGE));
+                        + "\n" + AddCommand.MESSAGE_USAGE);
 
         // missing urgency prefix
         assertParseFailure(parser, NAME_DESC_BOB + PHONE_DESC_BOB + EMAIL_DESC_BOB + ADDRESS_DESC_BOB
                         + IC_DESC_BOB + DOCTOR_NAME_DESC_BOB
                         + NEXT_OF_KIN_PHONE_DESC_BOB + NEXT_OF_KIN_DESC_BOB + NEXT_OF_KIN_RS_DESC_BOB,
                 "Missing required parameter(s): " + PREFIX_URGENCY
-                        + "\n" + String.format(MESSAGE_INVALID_COMMAND_FORMAT, AddCommand.MESSAGE_USAGE));
+                        + "\n" + AddCommand.MESSAGE_USAGE);
 
         // missing next-of-kin prefix
         assertParseFailure(parser, NAME_DESC_BOB + PHONE_DESC_BOB + EMAIL_DESC_BOB + ADDRESS_DESC_BOB
                         + IC_DESC_BOB + URGENCY_LEVEL_DESC_BOB + DOCTOR_NAME_DESC_BOB
                         + NEXT_OF_KIN_PHONE_DESC_BOB + NEXT_OF_KIN_RS_DESC_BOB,
                 "Missing required parameter(s): " + PREFIX_NEXT_OF_KIN
-                        + "\n" + String.format(MESSAGE_INVALID_COMMAND_FORMAT, AddCommand.MESSAGE_USAGE));
+                        + "\n" + AddCommand.MESSAGE_USAGE);
 
         // missing next-of-kin phone prefix
         assertParseFailure(parser, NAME_DESC_BOB + PHONE_DESC_BOB + EMAIL_DESC_BOB + ADDRESS_DESC_BOB
                         + IC_DESC_BOB + URGENCY_LEVEL_DESC_BOB + DOCTOR_NAME_DESC_BOB
                         + NEXT_OF_KIN_DESC_BOB + NEXT_OF_KIN_RS_DESC_BOB,
                 "Missing required parameter(s): " + PREFIX_NEXT_OF_KIN_PHONE
-                        + "\n" + String.format(MESSAGE_INVALID_COMMAND_FORMAT, AddCommand.MESSAGE_USAGE));
+                        + "\n" + AddCommand.MESSAGE_USAGE);
 
         // missing next-of-kin relationship prefix
         assertParseFailure(parser, NAME_DESC_BOB + PHONE_DESC_BOB + EMAIL_DESC_BOB + ADDRESS_DESC_BOB
                         + IC_DESC_BOB + URGENCY_LEVEL_DESC_BOB + DOCTOR_NAME_DESC_BOB
                         + NEXT_OF_KIN_PHONE_DESC_BOB + NEXT_OF_KIN_DESC_BOB,
                 "Missing required parameter(s): " + PREFIX_NEXT_OF_KIN_RELATIONSHIP
-                        + "\n" + String.format(MESSAGE_INVALID_COMMAND_FORMAT, AddCommand.MESSAGE_USAGE));
+                        + "\n" + AddCommand.MESSAGE_USAGE);
 
         // missing doctor prefix
         assertParseFailure(parser, NAME_DESC_BOB + PHONE_DESC_BOB + EMAIL_DESC_BOB + ADDRESS_DESC_BOB
                         + IC_DESC_BOB + URGENCY_LEVEL_DESC_BOB
                         + NEXT_OF_KIN_PHONE_DESC_BOB + NEXT_OF_KIN_DESC_BOB + NEXT_OF_KIN_RS_DESC_BOB,
                 "Missing required parameter(s): " + PREFIX_DOCTOR
-                        + "\n" + String.format(MESSAGE_INVALID_COMMAND_FORMAT, AddCommand.MESSAGE_USAGE));
+                        + "\n" + AddCommand.MESSAGE_USAGE);
 
         // multiple missing prefixes
         assertParseFailure(parser, NAME_DESC_BOB + PHONE_DESC_BOB + EMAIL_DESC_BOB,
@@ -512,7 +512,7 @@ public class AddCommandParserTest {
                         + PREFIX_NEXT_OF_KIN_PHONE + " "
                         + PREFIX_NEXT_OF_KIN_RELATIONSHIP + " "
                         + PREFIX_DOCTOR
-                        + "\n" + String.format(MESSAGE_INVALID_COMMAND_FORMAT, AddCommand.MESSAGE_USAGE));
+                        + "\n" + AddCommand.MESSAGE_USAGE);
 
         // all prefixes missing
         assertParseFailure(parser, " ",
@@ -526,6 +526,6 @@ public class AddCommandParserTest {
                         + PREFIX_NEXT_OF_KIN_PHONE + " "
                         + PREFIX_NEXT_OF_KIN_RELATIONSHIP + " "
                         + PREFIX_DOCTOR
-                        + "\n" + String.format(MESSAGE_INVALID_COMMAND_FORMAT, AddCommand.MESSAGE_USAGE));
+                        + "\n" + AddCommand.MESSAGE_USAGE);
     }
 }
